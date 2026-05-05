@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Manish Crackers - Your trusted wholesale and retail fireworks shop. Quality crackers for Diwali and all celebrations. Green crackers available!">
+    <meta name="keywords" content="crackers, fireworks, Diwali, wholesale crackers, retail crackers, Manish Crackers, green crackers, eco-friendly">
+    <title>Manish Crackers - Wholesale & Retail Fireworks | Diwali Special Offers</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Fireworks Animation Container -->
+    <div class="fireworks-container" id="fireworksContainer"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-fire-alt"></i>
+                </div>
+                <div class="logo-text">
+                    <span class="brand-name">Manish Crackers</span>
+                    <span class="brand-tagline">Light Up Your Life!</span>
+                </div>
+            </a>
+            <button class="nav-toggle" id="navToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="active"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="catalog.html"><i class="fas fa-th-large"></i> Catalog</a></li>
+                <li><a href="green-crackers.html"><i class="fas fa-leaf"></i> Green Crackers</a></li>
+                <li><a href="gift-boxes.html"><i class="fas fa-gift"></i> Gift Boxes</a></li>
+                <li><a href="safety.html"><i class="fas fa-shield-alt"></i> Safety Tips</a></li>
+                <li><a href="about.html"><i class="fas fa-info-circle"></i> About</a></li>
+                <li><a href="contact.html"><i class="fas fa-phone"></i> Contact</a></li>
+                <li>
+                    <a href="cart.html" class="cart-link">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count" id="cartCount">0</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Diwali Offer Banner -->
+    <div class="offer-banner">
+        <div class="offer-content">
+            <div class="offer-text">
+                <span class="offer-badge pulse">DIWALI SPECIAL</span>
+                <span class="offer-discount">Up to 40% OFF on Bulk Orders!</span>
+            </div>
+            <div class="offer-countdown">
+                <span>Offer ends in:</span>
+                <div class="countdown" id="countdown">
+                    <div class="countdown-item"><span id="days">00</span><small>Days</small></div>
+                    <div class="countdown-item"><span id="hours">00</span><small>Hours</small></div>
+                    <div class="countdown-item"><span id="minutes">00</span><small>Mins</small></div>
+                    <div class="countdown-item"><span id="seconds">00</span><small>Secs</small></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg">
+            <div class="floating-crackers">
+                <img src="images/rocket.png" alt="" class="float-cracker c1">
+                <img src="images/sparkler.png" alt="" class="float-cracker c2">
+                <img src="images/rocket.png" alt="" class="float-cracker c3">
+                <img src="images/sparkler.png" alt="" class="float-cracker c4">
+            </div>
+        </div>
+        <div class="hero-content">
+            <div class="hero-badge animate-bounce">
+                <i class="fas fa-star"></i> Trusted Since 2026
+            </div>
+            <h1 class="hero-title">
+                <span class="text-gradient">Celebrate Diwali</span>
+                <span class="text-white">with Manish Crackers!</span>
+            </h1>
+            <p class="hero-subtitle">Your One-Stop Shop for Premium Quality Crackers</p>
+            <p class="hero-desc">Wholesale & Retail | Green Crackers Available | Pan India Delivery</p>
+
+            <div class="hero-features">
+                <div class="hero-feature">
+                    <i class="fas fa-leaf"></i>
+                    <span>Eco-Friendly Options</span>
+                </div>
+                <div class="hero-feature">
+                    <i class="fas fa-truck"></i>
+                    <span>Fast Delivery</span>
+                </div>
+                <div class="hero-feature">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Safe & Certified</span>
+                </div>
+            </div>
+
+            <div class="hero-buttons">
+                <a href="catalog.html" class="btn btn-primary btn-glow">
+                    <i class="fas fa-th-large"></i> Shop Now
+                </a>
+                <a href="gift-boxes.html" class="btn btn-secondary">
+                    <i class="fas fa-gift"></i> Gift Boxes
+                </a>
+                <a href="https://wa.me/919876543210?text=Hi!%20I%20want%20to%20order%20crackers%20for%20Diwali" class="btn btn-whatsapp" target="_blank">
+                    <i class="fab fa-whatsapp"></i> Order on WhatsApp
+                </a>
+            </div>
+        </div>
+
+        <!-- Animated Sparkles -->
+        <div class="sparkles">
+            <div class="sparkle s1"></div>
+            <div class="sparkle s2"></div>
+            <div class="sparkle s3"></div>
+            <div class="sparkle s4"></div>
+            <div class="sparkle s5"></div>
+            <div class="sparkle s6"></div>
+            <div class="sparkle s7"></div>
+            <div class="sparkle s8"></div>
+        </div>
+    </section>
+
+    <!-- Delivery Info Banner -->
+    <section class="delivery-banner">
+        <div class="container">
+            <div class="delivery-grid">
+                <div class="delivery-item">
+                    <div class="delivery-icon"><i class="fas fa-truck-fast"></i></div>
+                    <div class="delivery-text">
+                        <h4>Free Delivery</h4>
+                        <p>On orders above ₹2000</p>
+                    </div>
+                </div>
+                <div class="delivery-item">
+                    <div class="delivery-icon"><i class="fas fa-box-open"></i></div>
+                    <div class="delivery-text">
+                        <h4>Safe Packaging</h4>
+                        <p>Secure & damage-proof</p>
+                    </div>
+                </div>
+                <div class="delivery-item">
+                    <div class="delivery-icon"><i class="fas fa-map-marker-alt"></i></div>
+                    <div class="delivery-text">
+                        <h4>Pan India Delivery</h4>
+                        <p>We deliver everywhere</p>
+                    </div>
+                </div>
+                <div class="delivery-item">
+                    <div class="delivery-icon"><i class="fas fa-headset"></i></div>
+                    <div class="delivery-text">
+                        <h4>24/7 Support</h4>
+                        <p>WhatsApp support</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="categories section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge"><i class="fas fa-fire"></i> Categories</span>
+                <h2 class="section-title">Shop by Category</h2>
+                <p class="section-subtitle">Find the perfect crackers for your celebration</p>
+            </div>
+            <div class="category-grid">
+                <a href="catalog.html?category=ground-chakkar" class="category-card">
+                    <div class="category-img">
+                        <img src="images/chakkar.png" alt="Ground Chakkar">
+                    </div>
+                    <div class="category-overlay">
+                        <i class="fas fa-circle-notch"></i>
+                    </div>
+                    <h3>Ground Chakkars</h3>
+                    <span class="category-count">12+ Items</span>
+                </a>
+                <a href="catalog.html?category=rockets" class="category-card">
+                    <div class="category-img">
+                        <img src="images/rocket.png" alt="Rockets">
+                    </div>
+                    <div class="category-overlay">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h3>Rockets</h3>
+                    <span class="category-count">15+ Items</span>
+                </a>
+                <a href="catalog.html?category=flowerpots" class="category-card">
+                    <div class="category-img">
+                        <img src="images/flowerpot.png" alt="Flowerpots">
+                    </div>
+                    <div class="category-overlay">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+                    <h3>Flowerpots</h3>
+                    <span class="category-count">10+ Items</span>
+                </a>
+                <a href="catalog.html?category=sparklers" class="category-card">
+                    <div class="category-img">
+                        <img src="images/sparkler.png" alt="Sparklers">
+                    </div>
+                    <div class="category-overlay">
+                        <i class="fas fa-magic"></i>
+                    </div>
+                    <h3>Sparklers</h3>
+                    <span class="category-count">8+ Items</span>
+                </a>
+                <a href="catalog.html?category=aerial" class="category-card featured">
+                    <div class="category-img">
+                        <img src="images/aerial.png" alt="Aerial Shots">
+                    </div>
+                    <div class="category-overlay">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h3>Aerial Shots</h3>
+                    <span class="category-count">20+ Items</span>
+                    <span class="hot-badge">HOT</span>
+                </a>
+                <a href="catalog.html?category=bombs" class="category-card">
+                    <div class="category-img">
+                        <img src="images/bomb.png" alt="Sound Crackers">
+                    </div>
+                    <div class="category-overlay">
+                        <i class="fas fa-bomb"></i>
+                    </div>
+                    <h3>Sound Crackers</h3>
+                    <span class="category-count">10+ Items</span>
+                </a>
+                <a href="catalog.html?category=fancy" class="category-card">
+                    <div class="category-img">
+                        <img src="images/fancy.png" alt="Fancy Items">
+                    </div>
+                    <div class="category-overlay">
+                        <i class="fas fa-wand-magic-sparkles"></i>
+                    </div>
+                    <h3>Fancy Items</h3>
+                    <span class="category-count">15+ Items</span>
+                </a>
+                <a href="gift-boxes.html" class="category-card featured">
+                    <div class="category-img">
+                        <img src="images/giftbox.png" alt="Gift Boxes">
+                    </div>
+                    <div class="category-overlay">
+                        <i class="fas fa-gift"></i>
+                    </div>
+                    <h3>Gift Boxes</h3>
+                    <span class="category-count">10+ Combos</span>
+                    <span class="hot-badge">BEST</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Green Crackers Section -->
+    <section class="green-crackers-section section">
+        <div class="container">
+            <div class="green-content">
+                <div class="green-info">
+                    <span class="eco-badge"><i class="fas fa-leaf"></i> Eco-Friendly</span>
+                    <h2>Go Green This Diwali!</h2>
+                    <p>Celebrate responsibly with our eco-friendly green crackers. Less smoke, less pollution, same excitement!</p>
+                    <ul class="green-features">
+                        <li><i class="fas fa-check-circle"></i> 30% Less Emission</li>
+                        <li><i class="fas fa-check-circle"></i> Reduced Noise Levels</li>
+                        <li><i class="fas fa-check-circle"></i> CSIR-NEERI Approved</li>
+                        <li><i class="fas fa-check-circle"></i> Same Visual Effects</li>
+                    </ul>
+                    <a href="green-crackers.html" class="btn btn-green">
+                        <i class="fas fa-leaf"></i> Explore Green Crackers
+                    </a>
+                </div>
+                <div class="green-image">
+                    <div class="green-badge-circle">
+                        <i class="fas fa-leaf"></i>
+                        <span>ECO</span>
+                    </div>
+                    <img src="images/green-crackers.png" alt="Green Crackers">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="featured section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge"><i class="fas fa-fire"></i> Best Sellers</span>
+                <h2 class="section-title">Most Popular Products</h2>
+                <p class="section-subtitle">Customer favorites this Diwali season</p>
+            </div>
+            <div class="product-grid" id="featuredProducts">
+                <!-- Products loaded by JavaScript -->
+            </div>
+            <div class="view-all">
+                <a href="catalog.html" class="btn btn-outline btn-lg">
+                    <i class="fas fa-th-large"></i> View All Products
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gift Boxes Preview -->
+    <section class="gift-boxes-preview section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge"><i class="fas fa-gift"></i> Special Combos</span>
+                <h2 class="section-title">Family Gift Boxes</h2>
+                <p class="section-subtitle">Complete celebration packages at best prices</p>
+            </div>
+            <div class="gift-boxes-grid">
+                <!-- Family Pack -->
+                <div class="gift-box-card">
+                    <div class="gift-box-ribbon">POPULAR</div>
+                    <div class="gift-box-image">
+                        <img src="images/giftbox.png" alt="Family Pack">
+                    </div>
+                    <div class="gift-box-info">
+                        <h3>Family Pack</h3>
+                        <p class="gift-box-desc">Perfect for small family celebrations</p>
+                        <div class="gift-box-contains">
+                            <h4><i class="fas fa-box-open"></i> Contains:</h4>
+                            <ul>
+                                <li><i class="fas fa-check"></i> 10 Sparklers</li>
+                                <li><i class="fas fa-check"></i> 5 Ground Chakkars</li>
+                                <li><i class="fas fa-check"></i> 5 Flowerpots</li>
+                                <li><i class="fas fa-check"></i> 3 Rockets</li>
+                                <li><i class="fas fa-check"></i> 2 Fancy Items</li>
+                            </ul>
+                        </div>
+                        <div class="gift-box-price">
+                            <div class="price-info">
+                                <span class="original-price">₹700</span>
+                                <span class="sale-price">₹500</span>
+                            </div>
+                            <span class="save-badge">Save ₹200</span>
+                        </div>
+                        <button class="btn btn-primary btn-block add-to-cart" data-id="28">
+                            <i class="fas fa-cart-plus"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Deluxe Pack -->
+                <div class="gift-box-card featured">
+                    <div class="gift-box-ribbon best">BEST VALUE</div>
+                    <div class="gift-box-image">
+                        <img src="images/giftbox.png" alt="Deluxe Pack">
+                    </div>
+                    <div class="gift-box-info">
+                        <h3>Deluxe Gift Box</h3>
+                        <p class="gift-box-desc">Premium collection for grand celebrations</p>
+                        <div class="gift-box-contains">
+                            <h4><i class="fas fa-box-open"></i> Contains:</h4>
+                            <ul>
+                                <li><i class="fas fa-check"></i> 20 Sparklers (Assorted)</li>
+                                <li><i class="fas fa-check"></i> 10 Ground Chakkars</li>
+                                <li><i class="fas fa-check"></i> 10 Flowerpots</li>
+                                <li><i class="fas fa-check"></i> 10 Rockets</li>
+                                <li><i class="fas fa-check"></i> 5 Aerial Shots</li>
+                                <li><i class="fas fa-check"></i> 5 Fancy Items</li>
+                            </ul>
+                        </div>
+                        <div class="gift-box-price">
+                            <div class="price-info">
+                                <span class="original-price">₹1400</span>
+                                <span class="sale-price">₹1000</span>
+                            </div>
+                            <span class="save-badge">Save ₹400</span>
+                        </div>
+                        <button class="btn btn-primary btn-block add-to-cart" data-id="29">
+                            <i class="fas fa-cart-plus"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Mega Combo -->
+                <div class="gift-box-card">
+                    <div class="gift-box-ribbon premium">PREMIUM</div>
+                    <div class="gift-box-image">
+                        <img src="images/giftbox.png" alt="Mega Combo">
+                    </div>
+                    <div class="gift-box-info">
+                        <h3>Mega Combo</h3>
+                        <p class="gift-box-desc">Ultimate package for mega celebrations</p>
+                        <div class="gift-box-contains">
+                            <h4><i class="fas fa-box-open"></i> Contains:</h4>
+                            <ul>
+                                <li><i class="fas fa-check"></i> 30 Sparklers (Premium)</li>
+                                <li><i class="fas fa-check"></i> 15 Ground Chakkars</li>
+                                <li><i class="fas fa-check"></i> 15 Flowerpots</li>
+                                <li><i class="fas fa-check"></i> 15 Rockets</li>
+                                <li><i class="fas fa-check"></i> 10 Aerial Shots</li>
+                                <li><i class="fas fa-check"></i> 10 Fancy Items</li>
+                                <li><i class="fas fa-check"></i> 5 Sound Crackers</li>
+                            </ul>
+                        </div>
+                        <div class="gift-box-price">
+                            <div class="price-info">
+                                <span class="original-price">₹2800</span>
+                                <span class="sale-price">₹2000</span>
+                            </div>
+                            <span class="save-badge">Save ₹800</span>
+                        </div>
+                        <button class="btn btn-primary btn-block add-to-cart" data-id="30">
+                            <i class="fas fa-cart-plus"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="view-all">
+                <a href="gift-boxes.html" class="btn btn-secondary btn-lg">
+                    <i class="fas fa-gift"></i> View All Gift Boxes
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Do's and Don'ts Section -->
+    <section class="safety-section section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge"><i class="fas fa-shield-alt"></i> Safety First</span>
+                <h2 class="section-title">Do's & Don'ts</h2>
+                <p class="section-subtitle">Follow these precautions while using crackers. Safety is our priority!</p>
+            </div>
+            <div class="dos-donts-grid">
+                <!-- DO's -->
+                <div class="dos-card">
+                    <div class="card-header do">
+                        <h3>DO'S</h3>
+                        <div class="emoji">😊</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="safety-item do">
+                            <i class="fas fa-check-square"></i>
+                            <div>
+                                <strong>Follow Instructions</strong>
+                                <p>Display fireworks as per the instructions mentioned on the pack.</p>
+                            </div>
+                        </div>
+                        <div class="safety-item do">
+                            <i class="fas fa-check-square"></i>
+                            <div>
+                                <strong>Outdoor Use Only</strong>
+                                <p>Use fireworks only outdoor in open spaces.</p>
+                            </div>
+                        </div>
+                        <div class="safety-item do">
+                            <i class="fas fa-check-square"></i>
+                            <div>
+                                <strong>Use Branded Fireworks</strong>
+                                <p>Buy fireworks from authorized/reputed manufacturers only.</p>
+                            </div>
+                        </div>
+                        <div class="safety-item do">
+                            <i class="fas fa-check-square"></i>
+                            <div>
+                                <strong>Keep Safe Distance</strong>
+                                <p>Light only one firework at a time. Others should watch from a safe distance.</p>
+                            </div>
+                        </div>
+                        <div class="safety-item do">
+                            <i class="fas fa-check-square"></i>
+                            <div>
+                                <strong>Use Agarbatti</strong>
+                                <p>Use an agarbatti (incense stick) to ignite the fireworks.</p>
+                            </div>
+                        </div>
+                        <div class="safety-item do">
+                            <i class="fas fa-check-square"></i>
+                            <div>
+                                <strong>Safe Storage</strong>
+                                <p>Store fireworks in a cool and dry place.</p>
+                            </div>
+                        </div>
+                        <div class="safety-item do">
+                            <i class="fas fa-check-square"></i>
+                            <div>
+                                <strong>Needs Supervision</strong>
+                                <p>Always have adult supervision when children are around.</p>
+                            </div>
+                        </div>
+                        <div class="safety-item do">
+                            <i class="fas fa-check-square"></i>
+                            <div>
+                                <strong>Emergency Water</strong>
+                                <p>Keep two buckets of water handy in case of fire or any mishap.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DON'Ts -->
+                <div class="donts-card">
+                    <div class="card-header dont">
+                        <h3>DON'TS</h3>
+                        <div class="emoji">😟</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="safety-item dont">
+                            <i class="fas fa-times-square"></i>
+                            <div>
+                                <strong>Don't Make Tricks</strong>
+                                <p>Never make your own fireworks.</p>
+                            </div>
+                        </div>
+                        <div class="safety-item dont">
+                            <i class="fas fa-times-square"></i>
+                            <div>
+                                <strong>Don't Relight</strong>
+                                <p>Never try to re-light or pick up fireworks that have not ignited fully.</p>
+                            </div>
+                        </div>
+                        <div class="safety-item dont">
+                            <i class="fas fa-times-square"></i>
+                            <div>
+                                <strong>Don't Carry It</strong>
+                                <p>Never carry fireworks in your pockets.</p>
+                            </div>
+                        </div>
+                        <div class="safety-item dont">
+                            <i class="fas fa-times-square"></i>
+                            <div>
+                                <strong>Do Not Use Glass/Metal</strong>
+                                <p>Never shoot fireworks in metal or glass containers.</p>
+                            </div>
+                        </div>
+                        <div class="safety-item dont">
+                            <i class="fas fa-times-square"></i>
+                            <div>
+                                <strong>Do Not Throw</strong>
+                                <p>Never point or throw fireworks at another person.</p>
+                            </div>
+                        </div>
+                        <div class="safety-item dont">
+                            <i class="fas fa-times-square"></i>
+                            <div>
+                                <strong>Don't Wear Loose Clothes</strong>
+                                <p>Do not wear loose clothing while using fireworks.</p>
+                            </div>
+                        </div>
+                        <div class="safety-item dont">
+                            <i class="fas fa-times-square"></i>
+                            <div>
+                                <strong>Don't Touch It</strong>
+                                <p>After the fireworks display never pick up leftover fireworks, they may still be active.</p>
+                            </div>
+                        </div>
+                        <div class="safety-item dont">
+                            <i class="fas fa-times-square"></i>
+                            <div>
+                                <strong>Don't Place Near Candles</strong>
+                                <p>Don't store firecrackers near burning candles or lamps.</p>
+                            </div>
+                        </div>
+                        <div class="safety-item dont">
+                            <i class="fas fa-times-square"></i>
+                            <div>
+                                <strong>Don't Drink & Burst</strong>
+                                <p>Alcohol causes delayed body responses & crackers might burst early.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="view-all">
+                <a href="safety.html" class="btn btn-outline">
+                    <i class="fas fa-shield-alt"></i> Read Complete Safety Guide
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us -->
+    <section class="why-us section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge"><i class="fas fa-trophy"></i> Why Us</span>
+                <h2 class="section-title">Why Choose Manish Crackers?</h2>
+                <p class="section-subtitle">Your satisfaction is our priority</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-medal"></i>
+                    </div>
+                    <h3>Premium Quality</h3>
+                    <p>Only the finest crackers from trusted manufacturers with quality certification</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-tags"></i>
+                    </div>
+                    <h3>Best Prices</h3>
+                    <p>Wholesale rates available. Up to 40% off on bulk orders this Diwali!</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <h3>Green Crackers</h3>
+                    <p>Eco-friendly options available. Celebrate responsibly!</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-truck-fast"></i>
+                    </div>
+                    <h3>Fast Delivery</h3>
+                    <p>Quick and safe delivery to your doorstep across India</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Safe Products</h3>
+                    <p>All products meet safety standards and come with proper instructions</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fab fa-whatsapp"></i>
+                    </div>
+                    <h3>Easy Ordering</h3>
+                    <p>Order via WhatsApp! We'll confirm and deliver to your location</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How to Order -->
+    <section class="how-to-order section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge"><i class="fas fa-shopping-cart"></i> Easy Process</span>
+                <h2 class="section-title">How to Order</h2>
+                <p class="section-subtitle">Simple steps to get your crackers delivered</p>
+            </div>
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <div class="step-icon"><i class="fas fa-th-large"></i></div>
+                    <h3>Browse Catalog</h3>
+                    <p>Explore our wide range of crackers and gift boxes</p>
+                </div>
+                <div class="step-arrow"><i class="fas fa-arrow-right"></i></div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <div class="step-icon"><i class="fas fa-cart-plus"></i></div>
+                    <h3>Add to Cart</h3>
+                    <p>Select items and add them to your cart</p>
+                </div>
+                <div class="step-arrow"><i class="fas fa-arrow-right"></i></div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <div class="step-icon"><i class="fab fa-whatsapp"></i></div>
+                    <h3>Send via WhatsApp</h3>
+                    <p>Your order is sent to us on WhatsApp</p>
+                </div>
+                <div class="step-arrow"><i class="fas fa-arrow-right"></i></div>
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <div class="step-icon"><i class="fas fa-truck"></i></div>
+                    <h3>Get Delivered</h3>
+                    <p>We confirm and deliver to your doorstep!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta section">
+        <div class="cta-bg">
+            <div class="cta-sparkles"></div>
+        </div>
+        <div class="container">
+            <div class="cta-content">
+                <h2>Ready to Light Up Your Diwali?</h2>
+                <p>Order now and get special Diwali discounts! Free delivery on orders above ₹2000</p>
+                <div class="cta-buttons">
+                    <a href="catalog.html" class="btn btn-primary btn-lg btn-glow">
+                        <i class="fas fa-th-large"></i> Shop Now
+                    </a>
+                    <a href="https://wa.me/919876543210?text=Hi%20Manish%20Crackers!%20I%20want%20to%20order%20crackers%20for%20Diwali.%20Please%20share%20the%20catalog." class="btn btn-whatsapp btn-lg" target="_blank">
+                        <i class="fab fa-whatsapp"></i> Order on WhatsApp
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-top">
+            <div class="container">
+                <div class="footer-grid">
+                    <div class="footer-col brand-col">
+                        <div class="footer-logo">
+                            <i class="fas fa-fire-alt"></i>
+                            <span>Manish Crackers</span>
+                        </div>
+                        <p>Your trusted fireworks partner since 2026. Quality crackers for all your celebrations with eco-friendly options.</p>
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-youtube"></i></a>
+                            <a href="https://wa.me/919876543210" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                        </div>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Quick Links</h4>
+                        <ul>
+                            <li><a href="index.html"><i class="fas fa-chevron-right"></i> Home</a></li>
+                            <li><a href="catalog.html"><i class="fas fa-chevron-right"></i> Catalog</a></li>
+                            <li><a href="green-crackers.html"><i class="fas fa-chevron-right"></i> Green Crackers</a></li>
+                            <li><a href="gift-boxes.html"><i class="fas fa-chevron-right"></i> Gift Boxes</a></li>
+                            <li><a href="safety.html"><i class="fas fa-chevron-right"></i> Safety Tips</a></li>
+                            <li><a href="about.html"><i class="fas fa-chevron-right"></i> About Us</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Categories</h4>
+                        <ul>
+                            <li><a href="catalog.html?category=rockets"><i class="fas fa-chevron-right"></i> Rockets</a></li>
+                            <li><a href="catalog.html?category=sparklers"><i class="fas fa-chevron-right"></i> Sparklers</a></li>
+                            <li><a href="catalog.html?category=flowerpots"><i class="fas fa-chevron-right"></i> Flowerpots</a></li>
+                            <li><a href="catalog.html?category=aerial"><i class="fas fa-chevron-right"></i> Aerial Shots</a></li>
+                            <li><a href="catalog.html?category=fancy"><i class="fas fa-chevron-right"></i> Fancy Items</a></li>
+                            <li><a href="catalog.html?category=bombs"><i class="fas fa-chevron-right"></i> Sound Crackers</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Contact Us</h4>
+                        <div class="contact-info">
+                            <p><i class="fas fa-map-marker-alt"></i> Your City, State<br>India - PIN Code</p>
+                            <p><i class="fas fa-phone"></i> <a href="tel:+919876543210">+91 98765 43210</a></p>
+                            <p><i class="fab fa-whatsapp"></i> <a href="https://wa.me/919876543210">+91 98765 43210</a></p>
+                            <p><i class="fas fa-clock"></i> Mon-Sat: 9AM - 9PM</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Manish Crackers. All Rights Reserved.</p>
+                <p class="disclaimer"><i class="fas fa-exclamation-triangle"></i> Fireworks should be used responsibly by adults. Keep away from children. Follow all safety guidelines.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Float Button -->
+    <a href="https://wa.me/919876543210?text=Hi!%20I%20want%20to%20order%20crackers%20from%20Manish%20Crackers" class="whatsapp-float" target="_blank">
+        <div class="whatsapp-pulse"></div>
+        <i class="fab fa-whatsapp"></i>
+        <span class="whatsapp-text">Order Now</span>
+    </a>
+
+    <!-- Admin Link (Hidden) -->
+    <a href="admin.html" class="admin-link" title="Admin">
+        <i class="fas fa-cog"></i>
+    </a>
+
+    <!-- Back to Top -->
+    <button class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script src="js/products.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/animations.js"></script>
+</body>
+</html>

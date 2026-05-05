@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Admin Panel - Manish Crackers</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="admin-body">
+    <!-- Login Screen -->
+    <div class="admin-login" id="adminLogin">
+        <div class="login-card">
+            <div class="login-header">
+                <i class="fas fa-fire-alt"></i>
+                <h1>Manish Crackers</h1>
+                <p>Admin Panel</p>
+            </div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter admin password" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+            </form>
+            <p class="login-hint">Default password: admin123</p>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div class="admin-dashboard" id="adminDashboard" style="display: none;">
+        <!-- Admin Header -->
+        <header class="admin-header">
+            <div class="admin-logo">
+                <i class="fas fa-fire-alt"></i>
+                <span>Manish Crackers - Admin</span>
+            </div>
+            <div class="admin-actions">
+                <a href="index.html" class="btn btn-outline btn-sm" target="_blank">
+                    <i class="fas fa-external-link-alt"></i> View Site
+                </a>
+                <button class="btn btn-text" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </header>
+
+        <!-- Admin Content -->
+        <div class="admin-content">
+            <!-- Sidebar -->
+            <aside class="admin-sidebar">
+                <nav class="admin-nav">
+                    <a href="#" class="admin-nav-item active" data-section="dashboard">
+                        <i class="fas fa-tachometer-alt"></i> Dashboard
+                    </a>
+                    <a href="#" class="admin-nav-item" data-section="products">
+                        <i class="fas fa-box"></i> Products
+                    </a>
+                    <a href="#" class="admin-nav-item" data-section="categories">
+                        <i class="fas fa-tags"></i> Categories
+                    </a>
+                    <a href="#" class="admin-nav-item" data-section="settings">
+                        <i class="fas fa-cog"></i> Settings
+                    </a>
+                </nav>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="admin-main">
+                <!-- Dashboard Section -->
+                <section class="admin-section active" id="dashboardSection">
+                    <h2>Dashboard</h2>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-box"></i></div>
+                            <div class="stat-info">
+                                <h3 id="totalProducts">0</h3>
+                                <p>Total Products</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-tags"></i></div>
+                            <div class="stat-info">
+                                <h3 id="totalCategories">0</h3>
+                                <p>Categories</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-rupee-sign"></i></div>
+                            <div class="stat-info">
+                                <h3 id="avgPrice">₹0</h3>
+                                <p>Avg. Price</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="quick-actions-admin">
+                        <h3>Quick Actions</h3>
+                        <div class="action-grid">
+                            <button class="action-card" onclick="showSection('products'); openProductModal();">
+                                <i class="fas fa-plus"></i>
+                                <span>Add Product</span>
+                            </button>
+                            <button class="action-card" id="exportDataBtn">
+                                <i class="fas fa-download"></i>
+                                <span>Export Data</span>
+                            </button>
+                            <button class="action-card" id="importDataBtn">
+                                <i class="fas fa-upload"></i>
+                                <span>Import Data</span>
+                            </button>
+                            <input type="file" id="importFileInput" accept=".json" style="display: none;">
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Products Section -->
+                <section class="admin-section" id="productsSection">
+                    <div class="section-header">
+                        <h2>Products</h2>
+                        <button class="btn btn-primary" id="addProductBtn">
+                            <i class="fas fa-plus"></i> Add Product
+                        </button>
+                    </div>
+
+                    <div class="admin-filters">
+                        <input type="text" id="adminSearch" placeholder="Search products..." class="admin-search">
+                        <select id="adminCategoryFilter" class="admin-select">
+                            <option value="all">All Categories</option>
+                        </select>
+                    </div>
+
+                    <div class="admin-table-container">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Name</th>
+                                    <th>Category</th>
+                                    <th>Retail Price</th>
+                                    <th>Wholesale Price</th>
+                                    <th>Min Qty</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="productsTableBody">
+                                <!-- Products loaded by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Categories Section -->
+                <section class="admin-section" id="categoriesSection">
+                    <div class="section-header">
+                        <h2>Categories</h2>
+                        <button class="btn btn-primary" id="addCategoryBtn">
+                            <i class="fas fa-plus"></i> Add Category
+                        </button>
+                    </div>
+
+                    <div class="categories-list" id="categoriesList">
+                        <!-- Categories loaded by JavaScript -->
+                    </div>
+                </section>
+
+                <!-- Settings Section -->
+                <section class="admin-section" id="settingsSection">
+                    <h2>Settings</h2>
+
+                    <div class="settings-card">
+                        <h3><i class="fab fa-whatsapp"></i> WhatsApp Settings</h3>
+                        <div class="form-group">
+                            <label for="whatsappNumber">WhatsApp Number (with country code)</label>
+                            <input type="text" id="whatsappNumber" placeholder="919876543210">
+                            <small>Enter without + sign. Example: 919876543210</small>
+                        </div>
+                        <button class="btn btn-primary" id="saveWhatsApp">
+                            <i class="fas fa-save"></i> Save
+                        </button>
+                    </div>
+
+                    <div class="settings-card">
+                        <h3><i class="fas fa-lock"></i> Change Password</h3>
+                        <div class="form-group">
+                            <label for="currentPassword">Current Password</label>
+                            <input type="password" id="currentPassword">
+                        </div>
+                        <div class="form-group">
+                            <label for="newPassword">New Password</label>
+                            <input type="password" id="newPassword">
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm New Password</label>
+                            <input type="password" id="confirmPassword">
+                        </div>
+                        <button class="btn btn-primary" id="changePasswordBtn">
+                            <i class="fas fa-key"></i> Change Password
+                        </button>
+                    </div>
+
+                    <div class="settings-card danger">
+                        <h3><i class="fas fa-exclamation-triangle"></i> Danger Zone</h3>
+                        <p>Reset all data to defaults. This cannot be undone!</p>
+                        <button class="btn btn-danger" id="resetDataBtn">
+                            <i class="fas fa-trash"></i> Reset All Data
+                        </button>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Product Modal -->
+    <div class="modal" id="productModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Add Product</h2>
+                <button class="modal-close" id="closeProductModal">&times;</button>
+            </div>
+            <form id="productForm">
+                <input type="hidden" id="productId">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="productName">Product Name *</label>
+                        <input type="text" id="productName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productCategory">Category *</label>
+                        <select id="productCategory" required>
+                            <!-- Categories loaded by JavaScript -->
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="productDescription">Description</label>
+                    <textarea id="productDescription" rows="2"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="productRetailPrice">Retail Price (₹) *</label>
+                        <input type="number" id="productRetailPrice" required min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="productWholesalePrice">Wholesale Price (₹) *</label>
+                        <input type="number" id="productWholesalePrice" required min="0">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="productMinQty">Min Wholesale Qty</label>
+                        <input type="number" id="productMinQty" value="10" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="productPack">Pack Size</label>
+                        <input type="text" id="productPack" placeholder="e.g., 10 pcs">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="productImage">Image URL</label>
+                    <input type="text" id="productImage" placeholder="https://example.com/image.jpg">
+                    <small>Leave empty for default placeholder</small>
+                </div>
+                <div class="form-group checkbox-group">
+                    <label>
+                        <input type="checkbox" id="productFeatured"> Featured Product (Show on homepage)
+                    </label>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-outline" id="cancelProduct">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Product
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Category Modal -->
+    <div class="modal" id="categoryModal">
+        <div class="modal-content modal-sm">
+            <div class="modal-header">
+                <h2 id="categoryModalTitle">Add Category</h2>
+                <button class="modal-close" id="closeCategoryModal">&times;</button>
+            </div>
+            <form id="categoryForm">
+                <input type="hidden" id="categoryId">
+                <div class="form-group">
+                    <label for="categoryName">Category Name *</label>
+                    <input type="text" id="categoryName" required>
+                </div>
+                <div class="form-group">
+                    <label for="categorySlug">Slug *</label>
+                    <input type="text" id="categorySlug" required placeholder="e.g., ground-chakkar">
+                    <small>Used in URLs. Lowercase, no spaces (use hyphens)</small>
+                </div>
+                <div class="form-group">
+                    <label for="categoryIcon">Icon Class</label>
+                    <input type="text" id="categoryIcon" placeholder="fas fa-rocket">
+                    <small>Font Awesome icon class</small>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-outline" id="cancelCategory">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Category
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/products.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>
