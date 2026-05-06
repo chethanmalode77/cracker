@@ -1,5 +1,5 @@
 // ================================
-// Manish Crackers - Products Data with LOCAL Images
+// Madhu Crackers - Products Data with LOCAL Images
 // ================================
 
 // LOCAL Cracker Images - stored in images folder
@@ -625,7 +625,7 @@ function initializeData() {
     localStorage.setItem('mc_categories', JSON.stringify(defaultCategories));
 
     if (!localStorage.getItem('mc_whatsapp')) {
-        localStorage.setItem('mc_whatsapp', '919876543210');
+        localStorage.setItem('mc_whatsapp', '919986954653');
     }
     if (!localStorage.getItem('mc_password')) {
         localStorage.setItem('mc_password', 'admin123');
