@@ -115,7 +115,7 @@ async function initializeSettings() {
     }
 
     return {
-        shopName: 'Madhu Crackers',
+        shopName: 'Madhu Fireworks',
         whatsappNumber: '919986954653',
         offerActive: true,
         offerTitle: 'Up to 40% OFF on Bulk Orders'
