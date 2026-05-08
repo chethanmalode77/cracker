@@ -1,8 +1,6 @@
 // ================================
-// Manish Crackers - Cart Page
+// Madhu Crackers - Cart Page
 // ================================
-
-let currentPriceType = 'retail';
 
 document.addEventListener('DOMContentLoaded', function() {
     loadCartPage();
@@ -15,19 +13,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Price type toggle
-    document.querySelectorAll('.toggle-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-            currentPriceType = this.dataset.type;
-            updateTotals();
-        });
-    });
-
     // Send WhatsApp order
     document.getElementById('sendWhatsApp')?.addEventListener('click', function() {
-        const message = generateWhatsAppMessage(currentPriceType);
+        const message = generateWhatsAppMessage();
         if (message) {
             const whatsappNumber = getWhatsAppNumber();
             window.open(`https://wa.me/${whatsappNumber}?text=${message}`, '_blank');
@@ -51,37 +39,51 @@ function loadCartPage() {
     emptyCart.style.display = 'none';
     cartContent.style.display = 'block';
 
-    // Render cart items
+    // Render cart items with compact design
     cartList.innerHTML = cart.map(item => {
-        const product = getProductById(item.productId);
-        if (!product) return '';
+        let product, itemTotal, packInfo, productId;
+
+        if (item.isGiftBox) {
+            product = {
+                id: item.productId,
+                name: item.name,
+                retailPrice: item.retailPrice,
+                image: item.image,
+                pack: item.pack || '1 Gift Box'
+            };
+            productId = item.productId;
+            itemTotal = item.retailPrice * item.quantity;
+            packInfo = item.pack || '1 Gift Box';
+        } else {
+            product = getProductById(item.productId);
+            if (!product) return '';
+            productId = product.id;
+            itemTotal = product.retailPrice * item.quantity;
+            packInfo = product.pack || product.quantity || '';
+        }
 
         return `
-            <div class="cart-item" data-id="${product.id}">
-                <div class="cart-item-image">
-                    ${product.image ?
-                        `<img src="${product.image}" alt="${product.name}">` :
-                        `<i class="fas fa-fire-alt"></i>`
-                    }
+            <div class="cart-item" data-id="${productId}" data-giftbox="${item.isGiftBox || false}">
+                <div class="cart-item-thumb">
+                    <img src="${product.image || 'images/logo.png'}" alt="${product.name}" onerror="this.src='images/logo.png'">
                 </div>
-                <div class="cart-item-info">
-                    <h4>${product.name}</h4>
-                    <p class="pack">${product.pack}</p>
-                    <div class="prices">
-                        <span class="retail-price">Retail: ₹${product.retailPrice}</span>
-                        <span class="wholesale-price">Wholesale: ₹${product.wholesalePrice}</span>
-                    </div>
+                <div class="cart-item-details">
+                    <h4 class="item-name">${product.name}${item.isGiftBox ? ' <i class="fas fa-gift" style="color:#ff6b35;font-size:12px;"></i>' : ''}</h4>
+                    <span class="item-pack">${packInfo}</span>
+                    <span class="item-price">Rs.${product.retailPrice}</span>
                 </div>
-                <div class="cart-item-actions">
-                    <div class="quantity-control">
-                        <button class="qty-btn minus" data-id="${product.id}">-</button>
-                        <span class="qty-value">${item.quantity}</span>
-                        <button class="qty-btn plus" data-id="${product.id}">+</button>
-                    </div>
-                    <span class="remove-item" data-id="${product.id}">
-                        <i class="fas fa-trash"></i> Remove
-                    </span>
+                <div class="cart-item-qty">
+                    <button class="qty-btn minus" data-id="${productId}" data-giftbox="${item.isGiftBox || false}">-</button>
+                    <span class="qty-value">${item.quantity}</span>
+                    <button class="qty-btn plus" data-id="${productId}" data-giftbox="${item.isGiftBox || false}">+</button>
                 </div>
+                <div class="cart-item-total">
+                    <span class="total-label">Total</span>
+                    <span class="total-amount">Rs.${itemTotal}</span>
+                </div>
+                <button class="cart-item-remove" data-id="${productId}" data-giftbox="${item.isGiftBox || false}" title="Remove">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
         `;
     }).join('');
@@ -89,11 +91,12 @@ function loadCartPage() {
     // Add event listeners for quantity controls
     document.querySelectorAll('.qty-btn.minus').forEach(btn => {
         btn.addEventListener('click', function() {
-            const id = parseInt(this.dataset.id);
+            const id = String(this.dataset.id);
+            const isGiftBox = this.dataset.giftbox === 'true';
             const cart = getCart();
-            const item = cart.find(i => i.productId === id);
+            const item = cart.find(i => String(i.productId) === id && (!!i.isGiftBox === isGiftBox));
             if (item && item.quantity > 1) {
-                updateCartItemQuantity(id, item.quantity - 1);
+                updateCartItemQuantity(id, item.quantity - 1, isGiftBox);
                 loadCartPage();
             }
         });
@@ -101,20 +104,22 @@ function loadCartPage() {
 
     document.querySelectorAll('.qty-btn.plus').forEach(btn => {
         btn.addEventListener('click', function() {
-            const id = parseInt(this.dataset.id);
+            const id = String(this.dataset.id);
+            const isGiftBox = this.dataset.giftbox === 'true';
             const cart = getCart();
-            const item = cart.find(i => i.productId === id);
+            const item = cart.find(i => String(i.productId) === id && (!!i.isGiftBox === isGiftBox));
             if (item) {
-                updateCartItemQuantity(id, item.quantity + 1);
+                updateCartItemQuantity(id, item.quantity + 1, isGiftBox);
                 loadCartPage();
             }
         });
     });
 
-    document.querySelectorAll('.remove-item').forEach(btn => {
+    document.querySelectorAll('.cart-item-remove').forEach(btn => {
         btn.addEventListener('click', function() {
-            const id = parseInt(this.dataset.id);
-            removeFromCart(id);
+            const id = String(this.dataset.id);
+            const isGiftBox = this.dataset.giftbox === 'true';
+            removeFromCart(id, isGiftBox);
             loadCartPage();
             showNotification('Item removed from cart');
         });
@@ -128,9 +133,5 @@ function updateTotals() {
     const totals = calculateCartTotals();
 
     document.getElementById('totalItems').textContent = totals.items;
-    document.getElementById('subtotalRetail').textContent = `₹${totals.retail}`;
-    document.getElementById('subtotalWholesale').textContent = `₹${totals.wholesale}`;
-
-    const grandTotal = currentPriceType === 'retail' ? totals.retail : totals.wholesale;
-    document.getElementById('grandTotal').textContent = `₹${grandTotal}`;
+    document.getElementById('grandTotal').textContent = `₹${totals.total}`;
 }
