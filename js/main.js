@@ -1,5 +1,5 @@
 // ================================
-// Madhu Crackers - Main JavaScript
+// Madhu Fireworks - Main JavaScript
 // ================================
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -234,5 +234,5 @@ function getUrlParam(param) {
 // ================================
 // Console Welcome Message
 // ================================
-console.log('%c🎆 Madhu Crackers', 'font-size: 24px; font-weight: bold; color: #ff6b35;');
-console.log('%cWelcome to Madhu Crackers! Light up your celebrations!', 'font-size: 14px; color: #666;');
+console.log('%c🎆 Madhu Fireworks', 'font-size: 24px; font-weight: bold; color: #ff6b35;');
+console.log('%cWelcome to Madhu Fireworks! Light up your celebrations!', 'font-size: 14px; color: #666;');
