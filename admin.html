@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel - Madhu Crackers</title>
+    <link rel="icon" type="image/svg+xml" href="images/logo.svg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -574,22 +575,61 @@
         }
 
         /* Responsive */
-        @media (max-width: 768px) {
+        @media (max-width: 992px) {
             .sidebar {
-                display: none;
+                position: fixed;
+                left: -250px;
+                top: 0;
+                bottom: 0;
+                z-index: 200;
+                transition: left 0.3s ease;
             }
+            .sidebar.active {
+                left: 0;
+            }
+            .admin-layout {
+                grid-template-columns: 1fr;
+            }
+            .main-content {
+                padding: 15px;
+            }
+        }
 
+        @media (max-width: 768px) {
             .form-row {
                 grid-template-columns: 1fr;
+            }
+
+            .admin-header {
+                padding: 12px 15px;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .admin-header h1 {
+                font-size: 18px;
             }
 
             .admin-header h1 span {
                 display: none;
             }
 
+            .user-info {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .user-info span {
+                font-size: 12px;
+                max-width: 150px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
             .table-header {
                 flex-direction: column;
                 align-items: stretch;
+                gap: 10px;
             }
 
             .search-box {
@@ -599,6 +639,97 @@
             .search-box input {
                 width: 100%;
             }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            .stat-card {
+                padding: 15px;
+            }
+
+            .stat-card .stat-value {
+                font-size: 24px;
+            }
+
+            .modal-content {
+                margin: 10px;
+                max-height: calc(100vh - 20px);
+            }
+
+            .modal-body {
+                padding: 15px;
+            }
+
+            .products-table {
+                display: block;
+                overflow-x: auto;
+            }
+
+            .products-table th,
+            .products-table td {
+                padding: 10px 8px;
+                font-size: 13px;
+            }
+
+            .settings-card {
+                padding: 15px;
+            }
+
+            .category-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .btn {
+                padding: 10px 16px;
+                font-size: 13px;
+            }
+
+            .form-group input,
+            .form-group select,
+            .form-group textarea {
+                padding: 10px 12px;
+                font-size: 14px;
+            }
+        }
+
+        /* Mobile menu toggle */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        @media (max-width: 992px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 199;
+        }
+
+        .sidebar-overlay.active {
+            display: block;
         }
 
         /* Settings Form */
@@ -679,6 +810,62 @@
             from { transform: translateX(100%); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
         }
+
+        /* Gift Box Items */
+        .giftbox-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+        .giftbox-item span {
+            flex: 1;
+            font-size: 14px;
+        }
+        .giftbox-item .item-qty {
+            background: #ff6b35;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .giftbox-item .remove-item {
+            background: #ffe6e6;
+            color: #dc3545;
+            border: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .giftbox-item .remove-item:hover {
+            background: #dc3545;
+            color: white;
+        }
+        .items-badge {
+            display: inline-flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+        .items-badge span {
+            background: #e6f3ff;
+            color: #007bff;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+        }
+        .label-badge {
+            padding: 4px 10px;
+            border-radius: 4px;
+            color: white;
+            font-size: 11px;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
@@ -725,6 +912,9 @@
     <!-- Admin Dashboard -->
     <div class="admin-container" id="adminContainer">
         <header class="admin-header">
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
             <h1><i class="fas fa-fire"></i> <span>Madhu Crackers Admin</span></h1>
             <div class="user-info">
                 <span id="userEmail"></span>
@@ -735,11 +925,13 @@
         </header>
 
         <div class="admin-body">
-            <nav class="sidebar">
+            <div class="sidebar-overlay" id="sidebarOverlay"></div>
+            <nav class="sidebar" id="sidebar">
                 <ul class="sidebar-menu">
                     <li><a href="#" data-page="dashboard" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
                     <li><a href="#" data-page="products"><i class="fas fa-box"></i> Products</a></li>
                     <li><a href="#" data-page="categories"><i class="fas fa-tags"></i> Categories</a></li>
+                    <li><a href="#" data-page="giftboxes"><i class="fas fa-gift"></i> Gift Boxes</a></li>
                     <li><a href="#" data-page="settings"><i class="fas fa-cog"></i> Settings</a></li>
                     <li><a href="index.html"><i class="fas fa-globe"></i> View Website</a></li>
                 </ul>
@@ -779,6 +971,13 @@
                             <div class="stat-info">
                                 <h3 id="bestSellers">0</h3>
                                 <p>Best Sellers</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon orange"><i class="fas fa-gift"></i></div>
+                            <div class="stat-info">
+                                <h3 id="totalGiftBoxes">0</h3>
+                                <p>Gift Boxes</p>
                             </div>
                         </div>
                     </div>
@@ -852,6 +1051,39 @@
                     <div class="category-grid" id="categoriesGrid"></div>
                 </section>
 
+                <!-- Gift Boxes Section -->
+                <section class="page-section" id="giftboxesSection">
+                    <div class="page-header">
+                        <h2>Gift Boxes</h2>
+                        <button class="btn btn-primary" onclick="openGiftBoxModal()">
+                            <i class="fas fa-plus"></i> Add Gift Box
+                        </button>
+                    </div>
+
+                    <div class="table-container">
+                        <div class="table-header">
+                            <div class="search-box">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="giftboxSearch" placeholder="Search gift boxes..." oninput="filterGiftBoxes()">
+                            </div>
+                        </div>
+                        <table class="giftbox-table">
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Name</th>
+                                    <th>Items</th>
+                                    <th>MRP</th>
+                                    <th>Offer Price</th>
+                                    <th>Label</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="giftboxesTable"></tbody>
+                        </table>
+                    </div>
+                </section>
+
                 <!-- Settings Section -->
                 <section class="page-section" id="settingsSection">
                     <div class="page-header">
@@ -902,7 +1134,7 @@
                     </div>
 
                     <div class="settings-card">
-                        <h3><i class="fas fa-percent"></i> Diwali Offer Settings</h3>
+                        <h3><i class="fas fa-percent"></i> Deepawali Offer Settings</h3>
                         <form id="offerForm">
                             <div class="form-row">
                                 <div class="form-group">
@@ -933,6 +1165,49 @@
                         <button class="btn btn-success" onclick="initializeData()">
                             <i class="fas fa-sync"></i> Initialize Default Data
                         </button>
+                    </div>
+
+                    <div class="settings-card">
+                        <h3><i class="fas fa-image"></i> How to Add Images</h3>
+                        <p style="margin-bottom: 15px; color: #666;">Since Firebase free tier doesn't allow image storage, use these free image hosting services:</p>
+
+                        <div class="image-guide">
+                            <div class="guide-option">
+                                <h4><i class="fas fa-star" style="color:#ffc107;"></i> Option 1: ImgBB (Recommended)</h4>
+                                <ol style="margin-left: 20px; color: #555; font-size: 14px; line-height: 1.8;">
+                                    <li>Go to <a href="https://imgbb.com/" target="_blank" style="color:#007bff;">imgbb.com</a></li>
+                                    <li>Click "Start uploading" and select your image</li>
+                                    <li>After upload, click on the image</li>
+                                    <li>Copy the "Direct link" URL (ends with .jpg/.png)</li>
+                                    <li>Paste that URL in the Image URL field</li>
+                                </ol>
+                            </div>
+
+                            <div class="guide-option" style="margin-top: 20px;">
+                                <h4><i class="fab fa-google-drive" style="color:#4285f4;"></i> Option 2: Google Drive</h4>
+                                <ol style="margin-left: 20px; color: #555; font-size: 14px; line-height: 1.8;">
+                                    <li>Upload image to Google Drive</li>
+                                    <li>Right-click > Share > "Anyone with the link"</li>
+                                    <li>Copy the link (looks like: drive.google.com/file/d/FILE_ID/view)</li>
+                                    <li>Replace the URL format to: <code style="background:#f5f5f5;padding:2px 6px;border-radius:4px;">https://drive.google.com/uc?export=view&id=FILE_ID</code></li>
+                                </ol>
+                            </div>
+
+                            <div class="guide-option" style="margin-top: 20px;">
+                                <h4><i class="fas fa-folder" style="color:#ff6b35;"></i> Option 3: Local Images</h4>
+                                <ol style="margin-left: 20px; color: #555; font-size: 14px; line-height: 1.8;">
+                                    <li>Save your image in the <code style="background:#f5f5f5;padding:2px 6px;border-radius:4px;">images/</code> folder of your website</li>
+                                    <li>Use the path: <code style="background:#f5f5f5;padding:2px 6px;border-radius:4px;">images/your-image-name.jpg</code></li>
+                                    <li>This is the fastest option but requires FTP/server access</li>
+                                </ol>
+                            </div>
+
+                            <div style="margin-top: 20px; padding: 15px; background: #fff3cd; border-radius: 10px; border-left: 4px solid #ffc107;">
+                                <p style="margin: 0; color: #856404; font-size: 13px;">
+                                    <i class="fas fa-lightbulb"></i> <strong>Tip:</strong> For best results, use square images (1:1 ratio) with minimum 300x300 pixels. Compress large images before uploading for faster loading.
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </section>
             </main>
@@ -976,7 +1251,6 @@
                             <input type="number" id="productOriginalPrice" min="0" placeholder="Strike-through price">
                         </div>
                     </div>
-                    <input type="hidden" id="productWholesalePrice" value="0">
 
                     <div class="form-group">
                         <label>Description</label>
@@ -1054,6 +1328,96 @@
         </div>
     </div>
 
+    <!-- Gift Box Modal -->
+    <div class="modal" id="giftboxModal">
+        <div class="modal-content" style="max-width: 700px;">
+            <div class="modal-header">
+                <h3 id="giftboxModalTitle">Add Gift Box</h3>
+                <button class="modal-close" onclick="closeGiftBoxModal()">&times;</button>
+            </div>
+            <form id="giftboxForm">
+                <div class="modal-body">
+                    <input type="hidden" id="giftboxId">
+
+                    <div class="form-group">
+                        <label>Gift Box Name *</label>
+                        <input type="text" id="giftboxName" required placeholder="e.g., Family Celebration Pack">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea id="giftboxDescription" rows="2" placeholder="Brief description of the gift box"></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>MRP (Rs.) *</label>
+                            <input type="number" id="giftboxMrp" required min="0" placeholder="Original price">
+                        </div>
+                        <div class="form-group">
+                            <label>Offer Price (Rs.) *</label>
+                            <input type="number" id="giftboxOfferPrice" required min="0" placeholder="Discounted price">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Ribbon Label</label>
+                            <input type="text" id="giftboxLabel" placeholder="e.g., BEST VALUE, 30% OFF">
+                        </div>
+                        <div class="form-group">
+                            <label>Ribbon Color</label>
+                            <select id="giftboxLabelColor">
+                                <option value="#ff6b35">Orange</option>
+                                <option value="#28a745">Green</option>
+                                <option value="#dc3545">Red</option>
+                                <option value="#007bff">Blue</option>
+                                <option value="#6f42c1">Purple</option>
+                                <option value="#ffc107">Yellow</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Gift Box Image URL</label>
+                        <input type="text" id="giftboxImageUrl" placeholder="https://example.com/image.jpg or images/giftbox.png" oninput="previewGiftBoxImage(this.value)">
+                        <small style="color:#666;">Use local path or paste image URL</small>
+                        <img id="giftboxImagePreview" class="image-preview" style="display:none; margin-top:10px;">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Items in Gift Box</label>
+                        <div id="giftboxItemsList" style="margin-bottom:10px;"></div>
+                        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                            <input type="text" id="newItemName" placeholder="Item name" style="flex:2; min-width:150px;">
+                            <input type="number" id="newItemQty" placeholder="Qty" style="width:70px;" min="1">
+                            <button type="button" class="btn btn-success" onclick="addGiftBoxItem()" style="padding:10px 15px;">
+                                <i class="fas fa-plus"></i> Add
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="display:flex; gap:30px; flex-wrap:wrap;">
+                        <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
+                            <input type="checkbox" id="giftboxInStock" checked style="width:20px; height:20px;">
+                            <span>In Stock</span>
+                        </label>
+                        <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
+                            <input type="checkbox" id="giftboxIsBestSeller" style="width:20px; height:20px;">
+                            <span>Best Seller</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeGiftBoxModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Gift Box
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Delete Confirmation Modal -->
     <div class="modal" id="deleteModal">
         <div class="modal-content" style="max-width: 400px;">
@@ -1088,15 +1452,22 @@
             initializeCategories,
             initializeDefaultProducts,
             getSettings,
-            updateSettings
+            updateSettings,
+            getGiftBoxes,
+            addGiftBox,
+            updateGiftBox,
+            deleteGiftBox
         } from './js/firebase-products.js';
 
         // Global variables
         let products = [];
         let categories = [];
+        let giftboxes = [];
         let currentUser = null;
         let editingProductId = null;
         let editingCategoryId = null;
+        let editingGiftBoxId = null;
+        let giftboxItems = [];
         let deleteCallback = null;
 
         // DOM Elements
@@ -1191,6 +1562,7 @@
             // Load data for specific pages
             if (page === 'products') loadProducts();
             if (page === 'categories') loadCategories();
+            if (page === 'giftboxes') loadGiftBoxes();
             if (page === 'settings') loadSettings();
         };
 
@@ -1200,12 +1572,14 @@
             try {
                 products = await getProducts();
                 categories = await getCategories();
+                giftboxes = await getGiftBoxes();
 
                 // Update stats
                 document.getElementById('totalProducts').textContent = products.length;
                 document.getElementById('totalCategories').textContent = categories.length;
                 document.getElementById('greenProducts').textContent = products.filter(p => p.isGreen).length;
                 document.getElementById('bestSellers').textContent = products.filter(p => p.isBestSeller).length;
+                document.getElementById('totalGiftBoxes').textContent = giftboxes.length;
 
                 // Recent products table
                 const recentTable = document.getElementById('recentProductsTable');
@@ -1309,7 +1683,6 @@
                     document.getElementById('productCategory').value = product.category;
                     document.getElementById('productQuantity').value = product.quantity || '';
                     document.getElementById('productRetailPrice').value = product.retailPrice;
-                    document.getElementById('productWholesalePrice').value = product.wholesalePrice;
                     document.getElementById('productOriginalPrice').value = product.originalPrice || '';
                     document.getElementById('productDescription').value = product.description || '';
                     document.getElementById('productInStock').checked = product.inStock !== false;
@@ -1372,7 +1745,6 @@
                     category: document.getElementById('productCategory').value,
                     quantity: document.getElementById('productQuantity').value,
                     retailPrice: parseInt(document.getElementById('productRetailPrice').value),
-                    wholesalePrice: parseInt(document.getElementById('productWholesalePrice').value),
                     originalPrice: document.getElementById('productOriginalPrice').value ? parseInt(document.getElementById('productOriginalPrice').value) : null,
                     description: document.getElementById('productDescription').value,
                     inStock: document.getElementById('productInStock').checked,
@@ -1576,6 +1948,231 @@
             };
         };
 
+        // ============ GIFT BOXES ============
+
+        // Load gift boxes
+        async function loadGiftBoxes() {
+            showLoading();
+            giftboxes = await getGiftBoxes();
+            renderGiftBoxesTable();
+            hideLoading();
+        }
+
+        // Render gift boxes table
+        function renderGiftBoxesTable(filteredGiftBoxes = null) {
+            const displayGiftBoxes = filteredGiftBoxes || giftboxes;
+            const tbody = document.getElementById('giftboxesTable');
+
+            if (displayGiftBoxes.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:40px;color:#666;">No gift boxes found. Click "Add Gift Box" to create one.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = displayGiftBoxes.map(gb => {
+                const savings = gb.mrp - gb.offerPrice;
+                const savingsPercent = Math.round((savings / gb.mrp) * 100);
+                const itemsHtml = (gb.items || []).slice(0, 3).map(item =>
+                    `<span>${item.name} x${item.qty}</span>`
+                ).join('');
+                const moreItems = (gb.items || []).length > 3 ? `<span>+${gb.items.length - 3} more</span>` : '';
+
+                return `
+                <tr>
+                    <td><img src="${gb.image || 'images/giftbox.png'}" class="product-img" onerror="this.src='images/giftbox.png'"></td>
+                    <td>
+                        ${gb.name}
+                        ${gb.isBestSeller ? '<span class="badge badge-warning" style="margin-left:5px">Best Seller</span>' : ''}
+                    </td>
+                    <td><div class="items-badge">${itemsHtml}${moreItems}</div></td>
+                    <td><s style="color:#999;">Rs.${gb.mrp}</s></td>
+                    <td style="color:#28a745;font-weight:600;">Rs.${gb.offerPrice} <small style="color:#666;">(${savingsPercent}% off)</small></td>
+                    <td>${gb.label ? `<span class="label-badge" style="background:${gb.labelColor || '#ff6b35'}">${gb.label}</span>` : '-'}</td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="action-btn edit" onclick="editGiftBox('${gb.id}')"><i class="fas fa-edit"></i></button>
+                            <button class="action-btn delete" onclick="confirmDeleteGiftBox('${gb.id}')"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </td>
+                </tr>
+            `}).join('');
+        }
+
+        // Filter gift boxes
+        window.filterGiftBoxes = function() {
+            const search = document.getElementById('giftboxSearch').value.toLowerCase();
+            const filtered = giftboxes.filter(gb => gb.name.toLowerCase().includes(search));
+            renderGiftBoxesTable(filtered);
+        };
+
+        // Open gift box modal
+        window.openGiftBoxModal = function(giftboxId = null) {
+            editingGiftBoxId = giftboxId;
+            giftboxItems = [];
+            const modal = document.getElementById('giftboxModal');
+            const title = document.getElementById('giftboxModalTitle');
+
+            if (giftboxId) {
+                title.textContent = 'Edit Gift Box';
+                const giftbox = giftboxes.find(gb => gb.id === giftboxId);
+                if (giftbox) {
+                    document.getElementById('giftboxId').value = giftbox.id;
+                    document.getElementById('giftboxName').value = giftbox.name;
+                    document.getElementById('giftboxDescription').value = giftbox.description || '';
+                    document.getElementById('giftboxMrp').value = giftbox.mrp;
+                    document.getElementById('giftboxOfferPrice').value = giftbox.offerPrice;
+                    document.getElementById('giftboxLabel').value = giftbox.label || '';
+                    document.getElementById('giftboxLabelColor').value = giftbox.labelColor || '#ff6b35';
+                    document.getElementById('giftboxImageUrl').value = giftbox.image || '';
+                    document.getElementById('giftboxInStock').checked = giftbox.inStock !== false;
+                    document.getElementById('giftboxIsBestSeller').checked = giftbox.isBestSeller === true;
+                    giftboxItems = giftbox.items ? [...giftbox.items] : [];
+
+                    if (giftbox.image) {
+                        document.getElementById('giftboxImagePreview').src = giftbox.image;
+                        document.getElementById('giftboxImagePreview').style.display = 'block';
+                    }
+                }
+            } else {
+                title.textContent = 'Add Gift Box';
+                document.getElementById('giftboxForm').reset();
+                document.getElementById('giftboxId').value = '';
+                document.getElementById('giftboxImagePreview').style.display = 'none';
+                document.getElementById('giftboxLabelColor').value = '#ff6b35';
+                giftboxItems = [];
+            }
+
+            renderGiftBoxItems();
+            modal.classList.add('active');
+        };
+
+        // Close gift box modal
+        window.closeGiftBoxModal = function() {
+            document.getElementById('giftboxModal').classList.remove('active');
+            editingGiftBoxId = null;
+            giftboxItems = [];
+        };
+
+        // Edit gift box
+        window.editGiftBox = function(giftboxId) {
+            openGiftBoxModal(giftboxId);
+        };
+
+        // Preview gift box image
+        window.previewGiftBoxImage = function(url) {
+            const preview = document.getElementById('giftboxImagePreview');
+            if (url && url.trim()) {
+                preview.src = url;
+                preview.style.display = 'block';
+                preview.onerror = function() {
+                    preview.style.display = 'none';
+                };
+            } else {
+                preview.style.display = 'none';
+            }
+        };
+
+        // Render gift box items list
+        function renderGiftBoxItems() {
+            const container = document.getElementById('giftboxItemsList');
+            if (giftboxItems.length === 0) {
+                container.innerHTML = '<p style="color:#999;font-size:13px;">No items added yet. Add items below.</p>';
+                return;
+            }
+            container.innerHTML = giftboxItems.map((item, index) => `
+                <div class="giftbox-item">
+                    <span>${item.name}</span>
+                    <span class="item-qty">x${item.qty}</span>
+                    <button type="button" class="remove-item" onclick="removeGiftBoxItem(${index})">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        // Add gift box item
+        window.addGiftBoxItem = function() {
+            const nameInput = document.getElementById('newItemName');
+            const qtyInput = document.getElementById('newItemQty');
+            const name = nameInput.value.trim();
+            const qty = parseInt(qtyInput.value) || 1;
+
+            if (!name) {
+                showToast('Please enter item name', 'error');
+                return;
+            }
+
+            giftboxItems.push({ name, qty });
+            renderGiftBoxItems();
+            nameInput.value = '';
+            qtyInput.value = '';
+            nameInput.focus();
+        };
+
+        // Remove gift box item
+        window.removeGiftBoxItem = function(index) {
+            giftboxItems.splice(index, 1);
+            renderGiftBoxItems();
+        };
+
+        // Gift box form submit
+        document.getElementById('giftboxForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            showLoading();
+
+            try {
+                const giftboxData = {
+                    name: document.getElementById('giftboxName').value,
+                    description: document.getElementById('giftboxDescription').value,
+                    mrp: parseInt(document.getElementById('giftboxMrp').value),
+                    offerPrice: parseInt(document.getElementById('giftboxOfferPrice').value),
+                    label: document.getElementById('giftboxLabel').value,
+                    labelColor: document.getElementById('giftboxLabelColor').value,
+                    image: document.getElementById('giftboxImageUrl').value || 'images/giftbox.png',
+                    items: giftboxItems,
+                    inStock: document.getElementById('giftboxInStock').checked,
+                    isBestSeller: document.getElementById('giftboxIsBestSeller').checked
+                };
+
+                let result;
+                if (editingGiftBoxId) {
+                    result = await updateGiftBox(editingGiftBoxId, giftboxData);
+                } else {
+                    result = await addGiftBox(giftboxData);
+                }
+
+                if (result.success) {
+                    showToast(editingGiftBoxId ? 'Gift Box updated!' : 'Gift Box added!');
+                    closeGiftBoxModal();
+                    loadGiftBoxes();
+                } else {
+                    showToast(result.error || 'Error saving gift box', 'error');
+                }
+            } catch (error) {
+                showToast('Error saving gift box', 'error');
+            }
+
+            hideLoading();
+        });
+
+        // Confirm delete gift box
+        window.confirmDeleteGiftBox = function(giftboxId) {
+            document.getElementById('deleteMessage').textContent = 'Are you sure you want to delete this gift box?';
+            document.getElementById('deleteModal').classList.add('active');
+
+            deleteCallback = async () => {
+                showLoading();
+                const result = await deleteGiftBox(giftboxId);
+                if (result.success) {
+                    showToast('Gift Box deleted!');
+                    loadGiftBoxes();
+                } else {
+                    showToast('Error deleting gift box', 'error');
+                }
+                hideLoading();
+                closeDeleteModal();
+            };
+        };
+
         // Load settings
         async function loadSettings() {
             showLoading();
@@ -1650,6 +2247,33 @@
                 hideLoading();
             }
         };
+
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+        if (mobileMenuBtn && sidebar) {
+            mobileMenuBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('active');
+                sidebarOverlay.classList.toggle('active');
+            });
+
+            sidebarOverlay.addEventListener('click', () => {
+                sidebar.classList.remove('active');
+                sidebarOverlay.classList.remove('active');
+            });
+
+            // Close sidebar when clicking a menu item on mobile
+            sidebar.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (window.innerWidth <= 992) {
+                        sidebar.classList.remove('active');
+                        sidebarOverlay.classList.remove('active');
+                    }
+                });
+            });
+        }
 
         // Initial loading state
         showLoading();
