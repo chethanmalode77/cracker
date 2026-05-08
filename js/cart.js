@@ -1,5 +1,5 @@
 // ================================
-// Manish Crackers - Cart Functions
+// Madhu Crackers - Cart Functions
 // ================================
 
 // Get cart from localStorage
@@ -19,15 +19,20 @@ function addToCart(productId, quantity = 1) {
     const cart = getCart();
     const product = getProductById(productId);
 
-    if (!product) return;
+    if (!product) {
+        console.log('Product not found:', productId);
+        return;
+    }
 
-    const existingItem = cart.find(item => item.productId === productId);
+    // Normalize ID to string for comparison
+    const normalizedId = String(productId);
+    const existingItem = cart.find(item => String(item.productId) === normalizedId);
 
     if (existingItem) {
         existingItem.quantity += quantity;
     } else {
         cart.push({
-            productId: productId,
+            productId: normalizedId,
             quantity: quantity
         });
     }
@@ -37,16 +42,18 @@ function addToCart(productId, quantity = 1) {
 }
 
 // Remove item from cart
-function removeFromCart(productId) {
+function removeFromCart(productId, isGiftBox = false) {
     let cart = getCart();
-    cart = cart.filter(item => item.productId !== productId);
+    const normalizedId = String(productId);
+    cart = cart.filter(item => !(String(item.productId) === normalizedId && (!!item.isGiftBox === isGiftBox)));
     saveCart(cart);
 }
 
 // Update item quantity
-function updateCartItemQuantity(productId, quantity) {
+function updateCartItemQuantity(productId, quantity, isGiftBox = false) {
     const cart = getCart();
-    const item = cart.find(item => item.productId === productId);
+    const normalizedId = String(productId);
+    const item = cart.find(item => String(item.productId) === normalizedId && (!!item.isGiftBox === isGiftBox));
 
     if (item) {
         item.quantity = Math.max(1, quantity);
@@ -80,28 +87,30 @@ function updateCartCount() {
 // Calculate cart totals
 function calculateCartTotals() {
     const cart = getCart();
-    let retailTotal = 0;
-    let wholesaleTotal = 0;
+    let total = 0;
     let itemCount = 0;
 
     cart.forEach(item => {
-        const product = getProductById(item.productId);
-        if (product) {
-            retailTotal += product.retailPrice * item.quantity;
-            wholesaleTotal += product.wholesalePrice * item.quantity;
+        if (item.isGiftBox) {
+            total += item.retailPrice * item.quantity;
             itemCount += item.quantity;
+        } else {
+            const product = getProductById(item.productId);
+            if (product) {
+                total += product.retailPrice * item.quantity;
+                itemCount += item.quantity;
+            }
         }
     });
 
     return {
-        retail: retailTotal,
-        wholesale: wholesaleTotal,
+        total: total,
         items: itemCount
     };
 }
 
 // Generate WhatsApp order message
-function generateWhatsAppMessage(priceType = 'retail') {
+function generateWhatsAppMessage() {
     const cart = getCart();
     const customerName = document.getElementById('customerName')?.value || '';
     const customerPhone = document.getElementById('customerPhone')?.value || '';
@@ -112,7 +121,7 @@ function generateWhatsAppMessage(priceType = 'retail') {
         return null;
     }
 
-    let message = `*New Order from Manish Crackers Website*\n\n`;
+    let message = `*New Order from Madhu Crackers Website*\n\n`;
     message += `*Order Items:*\n`;
     message += `━━━━━━━━━━━━━━━━━━━━\n`;
 
@@ -120,21 +129,30 @@ function generateWhatsAppMessage(priceType = 'retail') {
     let itemNum = 1;
 
     cart.forEach(item => {
-        const product = getProductById(item.productId);
-        if (product) {
-            const price = priceType === 'retail' ? product.retailPrice : product.wholesalePrice;
-            const itemTotal = price * item.quantity;
-            total += itemTotal;
+        let name, price, pack;
 
-            message += `${itemNum}. ${product.name}\n`;
-            message += `   ${product.pack} × ${item.quantity} = ₹${itemTotal}\n`;
-            itemNum++;
+        if (item.isGiftBox) {
+            name = item.name;
+            price = item.retailPrice;
+            pack = item.pack || '1 Gift Box';
+        } else {
+            const product = getProductById(item.productId);
+            if (!product) return;
+            name = product.name;
+            price = product.retailPrice;
+            pack = product.pack || product.quantity || '';
         }
+
+        const itemTotal = price * item.quantity;
+        total += itemTotal;
+
+        message += `${itemNum}. ${name}${item.isGiftBox ? ' (Gift Box)' : ''}\n`;
+        message += `   ${pack} x ${item.quantity} = Rs.${itemTotal}\n`;
+        itemNum++;
     });
 
     message += `━━━━━━━━━━━━━━━━━━━━\n`;
-    message += `*Price Type:* ${priceType === 'retail' ? 'Retail' : 'Wholesale'}\n`;
-    message += `*Total Amount:* ₹${total}\n\n`;
+    message += `*Total Amount:* Rs.${total}\n\n`;
     message += `*Customer Details:*\n`;
     message += `Name: ${customerName}\n`;
     message += `Phone: ${customerPhone}\n`;
