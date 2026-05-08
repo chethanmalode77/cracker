@@ -20,6 +20,7 @@ import {
 const productsCollection = collection(db, 'products');
 const categoriesCollection = collection(db, 'categories');
 const settingsCollection = collection(db, 'settings');
+const giftboxesCollection = collection(db, 'giftboxes');
 
 // Default categories
 const defaultCategories = [
@@ -210,13 +211,90 @@ async function deleteCategory(categoryId) {
     }
 }
 
+// ============ GIFT BOXES CRUD ============
+
+// Get all gift boxes from Firebase
+async function getGiftBoxes() {
+    try {
+        const snapshot = await getDocs(giftboxesCollection);
+        const giftboxes = [];
+        snapshot.forEach(doc => {
+            giftboxes.push({ id: doc.id, ...doc.data() });
+        });
+        return giftboxes;
+    } catch (error) {
+        console.error('Error fetching gift boxes:', error);
+        return [];
+    }
+}
+
+// Get single gift box
+async function getGiftBox(giftboxId) {
+    try {
+        const docRef = doc(db, 'giftboxes', giftboxId);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+            return { id: docSnap.id, ...docSnap.data() };
+        }
+        return null;
+    } catch (error) {
+        console.error('Error fetching gift box:', error);
+        return null;
+    }
+}
+
+// Add new gift box
+async function addGiftBox(giftboxData) {
+    try {
+        const docRef = await addDoc(giftboxesCollection, {
+            ...giftboxData,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+        });
+        return { success: true, id: docRef.id };
+    } catch (error) {
+        console.error('Error adding gift box:', error);
+        return { success: false, error: error.message };
+    }
+}
+
+// Update gift box
+async function updateGiftBox(giftboxId, giftboxData) {
+    try {
+        const docRef = doc(db, 'giftboxes', giftboxId);
+        await updateDoc(docRef, {
+            ...giftboxData,
+            updatedAt: new Date().toISOString()
+        });
+        return { success: true };
+    } catch (error) {
+        console.error('Error updating gift box:', error);
+        return { success: false, error: error.message };
+    }
+}
+
+// Delete gift box
+async function deleteGiftBox(giftboxId) {
+    try {
+        const docRef = doc(db, 'giftboxes', giftboxId);
+        await deleteDoc(docRef);
+        return { success: true };
+    } catch (error) {
+        console.error('Error deleting gift box:', error);
+        return { success: false, error: error.message };
+    }
+}
+
 // Get shop settings
 async function getSettings() {
     try {
         const docRef = doc(db, 'settings', 'shop');
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
-            return docSnap.data();
+            const settings = docSnap.data();
+            // Cache to localStorage for use by animations.js
+            localStorage.setItem('shopSettings', JSON.stringify(settings));
+            return settings;
         }
         return null;
     } catch (error) {
@@ -229,10 +307,14 @@ async function getSettings() {
 async function updateSettings(settingsData) {
     try {
         const docRef = doc(db, 'settings', 'shop');
-        await setDoc(docRef, {
+        const dataToSave = {
             ...settingsData,
             updatedAt: new Date().toISOString()
-        }, { merge: true });
+        };
+        await setDoc(docRef, dataToSave, { merge: true });
+        // Cache to localStorage for use by animations.js countdown
+        const currentSettings = JSON.parse(localStorage.getItem('shopSettings') || '{}');
+        localStorage.setItem('shopSettings', JSON.stringify({ ...currentSettings, ...dataToSave }));
         return { success: true };
     } catch (error) {
         console.error('Error updating settings:', error);
@@ -301,5 +383,10 @@ export {
     initializeCategories,
     initializeDefaultProducts,
     getSettings,
-    updateSettings
+    updateSettings,
+    getGiftBoxes,
+    getGiftBox,
+    addGiftBox,
+    updateGiftBox,
+    deleteGiftBox
 };
