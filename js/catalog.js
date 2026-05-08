@@ -1,27 +1,38 @@
 // ================================
-// Manish Crackers - Catalog Page
+// Madhu Crackers - Catalog Page
 // ================================
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize filters
-    initializeFilters();
-
-    // Load products
-    loadProducts();
-
-    // Get category from URL
+    // Get category from URL first
     const urlParams = new URLSearchParams(window.location.search);
     const categoryParam = urlParams.get('category');
-    if (categoryParam) {
-        document.getElementById('categoryFilter').value = categoryParam;
-        loadProducts();
+
+    // Wait for products to load from Firebase
+    if (typeof window.loadProducts === 'function') {
+        window.loadProducts().then(() => {
+            initializeFilters();
+            // Set category filter from URL AFTER initializing
+            if (categoryParam) {
+                document.getElementById('categoryFilter').value = categoryParam;
+            }
+            loadCatalogProducts();
+        });
+    } else {
+        // Fallback if products.js not loaded yet
+        setTimeout(() => {
+            initializeFilters();
+            if (categoryParam) {
+                document.getElementById('categoryFilter').value = categoryParam;
+            }
+            loadCatalogProducts();
+        }, 500);
     }
 
     // Filter event listeners
-    document.getElementById('searchInput').addEventListener('input', debounce(loadProducts, 300));
-    document.getElementById('categoryFilter').addEventListener('change', loadProducts);
-    document.getElementById('priceFilter').addEventListener('change', loadProducts);
-    document.getElementById('sortFilter').addEventListener('change', loadProducts);
+    document.getElementById('searchInput').addEventListener('input', debounce(loadCatalogProducts, 300));
+    document.getElementById('categoryFilter').addEventListener('change', loadCatalogProducts);
+    document.getElementById('priceFilter').addEventListener('change', loadCatalogProducts);
+    document.getElementById('sortFilter').addEventListener('change', loadCatalogProducts);
 
     // Clear filters
     document.getElementById('clearFilters').addEventListener('click', function() {
@@ -29,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('categoryFilter').value = 'all';
         document.getElementById('priceFilter').value = 'all';
         document.getElementById('sortFilter').value = 'name-asc';
-        loadProducts();
+        loadCatalogProducts();
     });
 
     // View toggle
@@ -73,13 +84,14 @@ function initializeFilters() {
     if (categorySelect) {
         categorySelect.innerHTML = '<option value="all">All Categories</option>';
         categories.forEach(cat => {
-            categorySelect.innerHTML += `<option value="${cat.slug}">${cat.name}</option>`;
+            const slug = cat.slug || cat.id;
+            categorySelect.innerHTML += `<option value="${slug}">${cat.name}</option>`;
         });
     }
 }
 
-// Load and filter products
-function loadProducts() {
+// Load and filter products for catalog
+function loadCatalogProducts() {
     const products = getProducts();
     const searchTerm = document.getElementById('searchInput').value.toLowerCase();
     const category = document.getElementById('categoryFilter').value;
@@ -93,9 +105,13 @@ function loadProducts() {
             return false;
         }
 
-        // Category filter
-        if (category !== 'all' && product.category !== category) {
-            return false;
+        // Category filter - case-insensitive comparison
+        if (category !== 'all') {
+            const productCategory = (product.category || '').toLowerCase();
+            const filterCategory = category.toLowerCase();
+            if (productCategory !== filterCategory) {
+                return false;
+            }
         }
 
         // Price filter
