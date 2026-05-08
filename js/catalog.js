@@ -1,5 +1,5 @@
 // ================================
-// Madhu Crackers - Catalog Page
+// Madhu Fireworks - Catalog Page
 // ================================
 
 document.addEventListener('DOMContentLoaded', function() {
