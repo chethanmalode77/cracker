@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - Madhu Crackers</title>
+    <title>Admin Panel - Madhu Fireworks</title>
     <link rel="icon" type="image/svg+xml" href="images/logo.svg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -500,41 +500,72 @@
         .toggle-switch {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            cursor: pointer;
+            padding: 10px 0;
         }
 
         .toggle-switch input {
-            display: none;
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
         }
 
         .toggle-slider {
-            width: 50px;
-            height: 26px;
-            background: #ddd;
-            border-radius: 15px;
+            width: 56px;
+            height: 30px;
+            background: #dc3545;
+            border-radius: 30px;
             position: relative;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .toggle-slider::before {
+            content: 'OFF';
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 9px;
+            font-weight: 700;
+            color: white;
+            opacity: 1;
+            transition: opacity 0.2s;
         }
 
         .toggle-slider::after {
             content: '';
             position: absolute;
-            width: 22px;
-            height: 22px;
+            width: 24px;
+            height: 24px;
             background: white;
             border-radius: 50%;
-            top: 2px;
-            left: 2px;
-            transition: all 0.3s;
+            top: 3px;
+            left: 3px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
         .toggle-switch input:checked + .toggle-slider {
             background: #28a745;
         }
 
+        .toggle-switch input:checked + .toggle-slider::before {
+            content: 'ON';
+            left: 10px;
+            right: auto;
+        }
+
         .toggle-switch input:checked + .toggle-slider::after {
-            left: 26px;
+            left: 29px;
+        }
+
+        .toggle-switch span:last-child {
+            font-weight: 500;
+            color: #333;
         }
 
         /* Loading Spinner */
@@ -884,7 +915,7 @@
     <!-- Login Container -->
     <div class="login-container" id="loginContainer">
         <div class="login-box">
-            <h1><i class="fas fa-fire"></i> Madhu Crackers</h1>
+            <h1><i class="fas fa-fire"></i> Madhu Fireworks</h1>
             <p>Admin Panel Login</p>
 
             <div class="error-msg" id="loginError"></div>
@@ -915,7 +946,7 @@
             <button class="mobile-menu-btn" id="mobileMenuBtn">
                 <i class="fas fa-bars"></i>
             </button>
-            <h1><i class="fas fa-fire"></i> <span>Madhu Crackers Admin</span></h1>
+            <h1><i class="fas fa-fire"></i> <span>Madhu Fireworks Admin</span></h1>
             <div class="user-info">
                 <span id="userEmail"></span>
                 <button class="btn btn-secondary" id="logoutBtn">
@@ -1096,7 +1127,7 @@
                             <div class="form-row">
                                 <div class="form-group">
                                     <label>Shop Name</label>
-                                    <input type="text" id="shopName" value="Madhu Crackers">
+                                    <input type="text" id="shopName" value="Madhu Fireworks">
                                 </div>
                                 <div class="form-group">
                                     <label>Proprietor Name</label>
@@ -2178,7 +2209,7 @@
             showLoading();
             const settings = await getSettings();
             if (settings) {
-                document.getElementById('shopName').value = settings.shopName || 'Madhu Crackers';
+                document.getElementById('shopName').value = settings.shopName || 'Madhu Fireworks';
                 document.getElementById('proprietorName').value = settings.proprietorName || 'Madhu';
                 document.getElementById('whatsappNumber').value = settings.whatsappNumber || '919986954653';
                 document.getElementById('phoneNumber').value = settings.phoneNumber || '';
