@@ -4,9 +4,145 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Your shopping cart - Review and order your selected crackers">
-    <title>My Order List - Madhu Crackers</title>
+    <title>My Order List - Madhu Fireworks</title>
+    <link rel="icon" type="image/svg+xml" href="images/logo.svg">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Improved Cart Item Styles */
+        .cart-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            position: relative;
+        }
+        .cart-item-thumb {
+            width: 60px;
+            height: 60px;
+            flex-shrink: 0;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #f8f8f8;
+        }
+        .cart-item-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .cart-item-details {
+            flex: 1;
+            min-width: 0;
+        }
+        .cart-item-details .item-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            margin: 0 0 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .cart-item-details .item-pack {
+            display: block;
+            font-size: 12px;
+            color: #888;
+        }
+        .cart-item-details .item-price {
+            display: block;
+            font-size: 14px;
+            color: #ff6b35;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+        .cart-item-qty {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            padding: 4px;
+        }
+        .cart-item-qty .qty-btn {
+            width: 28px;
+            height: 28px;
+            border: none;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            transition: all 0.2s;
+        }
+        .cart-item-qty .qty-btn:hover {
+            background: #ff6b35;
+            color: white;
+        }
+        .cart-item-qty .qty-value {
+            width: 30px;
+            text-align: center;
+            font-weight: 600;
+        }
+        .cart-item-total {
+            text-align: right;
+            min-width: 70px;
+        }
+        .cart-item-total .total-label {
+            display: block;
+            font-size: 11px;
+            color: #888;
+        }
+        .cart-item-total .total-amount {
+            font-size: 16px;
+            font-weight: 700;
+            color: #333;
+        }
+        .cart-item-remove {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 24px;
+            height: 24px;
+            border: none;
+            background: #fee;
+            color: #e53935;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 12px;
+            opacity: 0.7;
+            transition: all 0.2s;
+        }
+        .cart-item-remove:hover {
+            opacity: 1;
+            background: #e53935;
+            color: white;
+        }
+        @media (max-width: 600px) {
+            .cart-item {
+                flex-wrap: wrap;
+                padding: 12px;
+            }
+            .cart-item-thumb {
+                width: 50px;
+                height: 50px;
+            }
+            .cart-item-details {
+                flex: 1 1 calc(100% - 120px);
+            }
+            .cart-item-qty {
+                order: 4;
+            }
+            .cart-item-total {
+                order: 3;
+                min-width: 60px;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Navigation -->
@@ -14,7 +150,7 @@
         <div class="nav-container">
             <a href="index.html" class="logo">
                 <i class="fas fa-fire-alt"></i>
-                <span>Madhu Crackers</span>
+                <span>Madhu Fireworks</span>
             </a>
             <button class="nav-toggle" id="navToggle">
                 <i class="fas fa-bars"></i>
@@ -76,25 +212,9 @@
                             <span>Total Items:</span>
                             <span id="totalItems">0</span>
                         </div>
-                        <div class="summary-row">
-                            <span>Subtotal (Retail):</span>
-                            <span id="subtotalRetail">₹0</span>
-                        </div>
-                        <div class="summary-row wholesale-row">
-                            <span>Subtotal (Wholesale):</span>
-                            <span id="subtotalWholesale">₹0</span>
-                        </div>
                         <div class="summary-row total">
-                            <span>Total:</span>
+                            <span>Total Amount:</span>
                             <span id="grandTotal">₹0</span>
-                        </div>
-
-                        <div class="price-type-toggle">
-                            <label>Price Type:</label>
-                            <div class="toggle-buttons">
-                                <button class="toggle-btn active" data-type="retail">Retail</button>
-                                <button class="toggle-btn" data-type="wholesale">Wholesale</button>
-                            </div>
                         </div>
 
                         <!-- Customer Details -->
@@ -131,8 +251,8 @@
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-col">
-                    <h4><i class="fas fa-fire-alt"></i> Madhu Crackers</h4>
-                    <p>Your trusted fireworks partner since 2026.</p>
+                    <h4><i class="fas fa-fire-alt"></i> Madhu Fireworks</h4>
+                    <p>Your trusted fireworks partner since 2019.</p>
                 </div>
                 <div class="footer-col">
                     <h4>Quick Links</h4>
@@ -150,10 +270,10 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2026 Madhu Crackers. All Rights Reserved.</p>
+                <p>&copy; 2019 Madhu Fireworks. All Rights Reserved.</p>
                 <div class="legal-disclaimer" style="margin-top: 15px; padding: 15px; background: rgba(255,255,255,0.1); border-radius: 8px; font-size: 12px; line-height: 1.6;">
                     <p style="color: #ffc107; font-weight: 600; margin-bottom: 8px;"><i class="fas fa-gavel"></i> LEGAL DISCLAIMER (As per Supreme Court of India Guidelines)</p>
-                    <p style="color: #ccc;">As per the Hon'ble Supreme Court of India directions, sale and use of firecrackers is permitted only during specific timings: 8:00 PM to 10:00 PM on Diwali and other festivals. Only Green Crackers approved by PESO/CSIR-NEERI are permitted for sale. We urge all customers to follow local administration guidelines and celebrate responsibly.</p>
+                    <p style="color: #ccc;">As per the Hon'ble Supreme Court of India directions, sale and use of firecrackers is permitted only during specific timings: 8:00 PM to 10:00 PM on Deepawali and other festivals. Only Green Crackers approved by PESO/CSIR-NEERI are permitted for sale. We urge all customers to follow local administration guidelines and celebrate responsibly.</p>
                 </div>
             </div>
         </div>
@@ -168,5 +288,7 @@
     <script src="js/cart.js"></script>
     <script src="js/main.js"></script>
     <script src="js/cart-page.js"></script>
+    <!-- Load Settings from Firebase -->
+    <script type="module" src="js/settings-loader.js"></script>
 </body>
 </html>
