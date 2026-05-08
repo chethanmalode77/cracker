@@ -1,750 +1,385 @@
 // ================================
-// Madhu Crackers - Products Data with LOCAL Images
+// Madhu Crackers - Products Data
+// Loads from Firebase with localStorage fallback
 // ================================
 
 // LOCAL Cracker Images - stored in images folder
 const CRACKER_IMAGES = {
     chakkar: 'images/chakkar.png',
+    chakkars: 'images/chakkar.png',
     rocket: 'images/rocket.png',
+    rockets: 'images/rocket.png',
     flowerpot: 'images/flowerpot.png',
+    flowerpots: 'images/flowerpot.png',
     sparkler: 'images/sparkler.png',
+    sparklers: 'images/sparkler.png',
     aerial: 'images/aerial.png',
     bomb: 'images/bomb.png',
+    bombs: 'images/bomb.png',
     fancy: 'images/fancy.png',
     giftbox: 'images/giftbox.png',
+    giftboxes: 'images/giftbox.png',
     green: 'images/green-crackers.png',
     fountain: 'images/flowerpot.png',
     snake: 'images/fancy.png',
     smoke: 'images/fancy.png'
 };
 
-// Default Categories
+// Firebase Configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyB5OqEPIhmMD5iHagDHE7LFdQKPaZAUKmE",
+    authDomain: "manish-crackers.firebaseapp.com",
+    projectId: "manish-crackers",
+    storageBucket: "manish-crackers.firebasestorage.app",
+    messagingSenderId: "694474710227",
+    appId: "1:694474710227:web:3cf988f5ca44eee8910826"
+};
+
+// Global variables for products and categories
+let products = [];
+let categories = [];
+let firebaseInitialized = false;
+
+// Default Categories (fallback)
 const defaultCategories = [
-    { id: 1, name: 'Ground Chakkars', slug: 'ground-chakkar', icon: 'fas fa-circle-notch' },
-    { id: 2, name: 'Rockets', slug: 'rockets', icon: 'fas fa-rocket' },
-    { id: 3, name: 'Flowerpots', slug: 'flowerpots', icon: 'fas fa-seedling' },
-    { id: 4, name: 'Sparklers', slug: 'sparklers', icon: 'fas fa-magic' },
-    { id: 5, name: 'Aerial Shots', slug: 'aerial', icon: 'fas fa-star' },
-    { id: 6, name: 'Sound Crackers', slug: 'bombs', icon: 'fas fa-bomb' },
-    { id: 7, name: 'Fancy Items', slug: 'fancy', icon: 'fas fa-wand-magic-sparkles' },
-    { id: 8, name: 'Gift Boxes', slug: 'gift-boxes', icon: 'fas fa-gift' },
-    { id: 9, name: 'Green Crackers', slug: 'green', icon: 'fas fa-leaf' }
+    { id: 'chakkars', name: 'Ground Chakkars', slug: 'chakkars', icon: 'fas fa-circle-notch', image: 'images/chakkar.png' },
+    { id: 'rockets', name: 'Rockets', slug: 'rockets', icon: 'fas fa-rocket', image: 'images/rocket.png' },
+    { id: 'flowerpots', name: 'Flowerpots', slug: 'flowerpots', icon: 'fas fa-seedling', image: 'images/flowerpot.png' },
+    { id: 'sparklers', name: 'Sparklers', slug: 'sparklers', icon: 'fas fa-magic', image: 'images/sparkler.png' },
+    { id: 'aerial', name: 'Aerial Shots', slug: 'aerial', icon: 'fas fa-star', image: 'images/aerial.png' },
+    { id: 'bombs', name: 'Sound Crackers', slug: 'bombs', icon: 'fas fa-bomb', image: 'images/bomb.png' },
+    { id: 'fancy', name: 'Fancy Items', slug: 'fancy', icon: 'fas fa-wand-magic-sparkles', image: 'images/fancy.png' },
+    { id: 'giftboxes', name: 'Gift Boxes', slug: 'giftboxes', icon: 'fas fa-gift', image: 'images/giftbox.png' }
 ];
 
-// Default Products with LOCAL Images
+// Default Products (fallback if Firebase fails)
 const defaultProducts = [
-    // ========== GROUND CHAKKARS ==========
-    {
-        id: 1,
-        name: 'Ground Chakkar Regular',
-        category: 'ground-chakkar',
-        description: 'Classic ground spinner with colorful sparks',
-        pack: '10 pcs',
-        retailPrice: 50,
-        wholesalePrice: 40,
-        minQty: 10,
-        image: CRACKER_IMAGES.chakkar,
-        featured: true,
-        isGreen: false
-    },
-    {
-        id: 2,
-        name: 'Deluxe Ground Chakkar',
-        category: 'ground-chakkar',
-        description: 'Premium chakkar with longer duration and multi-color',
-        pack: '5 pcs',
-        retailPrice: 80,
-        wholesalePrice: 65,
-        minQty: 10,
-        image: CRACKER_IMAGES.chakkar,
-        featured: false,
-        isGreen: false
-    },
-    {
-        id: 3,
-        name: 'Big Ground Chakkar',
-        category: 'ground-chakkar',
-        description: 'Large size chakkar with stunning effects',
-        pack: '3 pcs',
-        retailPrice: 100,
-        wholesalePrice: 80,
-        minQty: 10,
-        image: CRACKER_IMAGES.chakkar,
-        featured: false,
-        isGreen: false
-    },
-    {
-        id: 4,
-        name: 'Green Ground Chakkar',
-        category: 'green',
-        description: 'Eco-friendly chakkar with 30% less emission',
-        pack: '10 pcs',
-        retailPrice: 60,
-        wholesalePrice: 48,
-        minQty: 10,
-        image: CRACKER_IMAGES.green,
-        featured: true,
-        isGreen: true
-    },
-
-    // ========== ROCKETS ==========
-    {
-        id: 5,
-        name: 'Small Rocket',
-        category: 'rockets',
-        description: 'Entry-level rocket with bright trail',
-        pack: '10 pcs',
-        retailPrice: 100,
-        wholesalePrice: 80,
-        minQty: 10,
-        image: CRACKER_IMAGES.rocket,
-        featured: true,
-        isGreen: false
-    },
-    {
-        id: 6,
-        name: 'Big Rocket',
-        category: 'rockets',
-        description: 'Powerful rocket with loud burst and colors',
-        pack: '5 pcs',
-        retailPrice: 150,
-        wholesalePrice: 120,
-        minQty: 10,
-        image: CRACKER_IMAGES.rocket,
-        featured: false,
-        isGreen: false
-    },
-    {
-        id: 7,
-        name: 'Whistling Rocket',
-        category: 'rockets',
-        description: 'Rocket with whistling sound as it ascends',
-        pack: '10 pcs',
-        retailPrice: 200,
-        wholesalePrice: 160,
-        minQty: 10,
-        image: CRACKER_IMAGES.rocket,
-        featured: true,
-        isGreen: false
-    },
-    {
-        id: 8,
-        name: 'Sky Shot Rocket',
-        category: 'rockets',
-        description: 'High altitude rocket with colorful burst',
-        pack: '5 pcs',
-        retailPrice: 250,
-        wholesalePrice: 200,
-        minQty: 10,
-        image: CRACKER_IMAGES.rocket,
-        featured: false,
-        isGreen: false
-    },
-    {
-        id: 9,
-        name: 'Green Rocket',
-        category: 'green',
-        description: 'Eco-friendly rocket with reduced smoke',
-        pack: '5 pcs',
-        retailPrice: 180,
-        wholesalePrice: 145,
-        minQty: 10,
-        image: CRACKER_IMAGES.green,
-        featured: true,
-        isGreen: true
-    },
-
-    // ========== FLOWERPOTS ==========
-    {
-        id: 10,
-        name: 'Standard Flowerpot',
-        category: 'flowerpots',
-        description: 'Classic flowerpot with golden shower',
-        pack: '10 pcs',
-        retailPrice: 120,
-        wholesalePrice: 95,
-        minQty: 10,
-        image: CRACKER_IMAGES.flowerpot,
-        featured: false,
-        isGreen: false
-    },
-    {
-        id: 11,
-        name: 'Multicolor Flowerpot',
-        category: 'flowerpots',
-        description: 'Flowerpot with multiple color changes',
-        pack: '5 pcs',
-        retailPrice: 100,
-        wholesalePrice: 80,
-        minQty: 10,
-        image: CRACKER_IMAGES.flowerpot,
-        featured: true,
-        isGreen: false
-    },
-    {
-        id: 12,
-        name: 'Deluxe Flowerpot',
-        category: 'flowerpots',
-        description: 'Premium flowerpot with crackling effect',
-        pack: '5 pcs',
-        retailPrice: 150,
-        wholesalePrice: 120,
-        minQty: 10,
-        image: CRACKER_IMAGES.flowerpot,
-        featured: false,
-        isGreen: false
-    },
-    {
-        id: 13,
-        name: 'Green Flowerpot',
-        category: 'green',
-        description: 'Eco-friendly flowerpot, less pollution',
-        pack: '5 pcs',
-        retailPrice: 130,
-        wholesalePrice: 105,
-        minQty: 10,
-        image: CRACKER_IMAGES.green,
-        featured: false,
-        isGreen: true
-    },
-
-    // ========== SPARKLERS ==========
-    {
-        id: 14,
-        name: 'Color Sparklers',
-        category: 'sparklers',
-        description: 'Hand-held sparklers with colored sparks',
-        pack: '10 pcs',
-        retailPrice: 30,
-        wholesalePrice: 22,
-        minQty: 20,
-        image: CRACKER_IMAGES.sparkler,
-        featured: true,
-        isGreen: false
-    },
-    {
-        id: 15,
-        name: 'Electric Sparklers',
-        category: 'sparklers',
-        description: 'Bright white electric sparklers',
-        pack: '10 pcs',
-        retailPrice: 50,
-        wholesalePrice: 38,
-        minQty: 20,
-        image: CRACKER_IMAGES.sparkler,
-        featured: false,
-        isGreen: false
-    },
-    {
-        id: 16,
-        name: 'Long Sparklers (30cm)',
-        category: 'sparklers',
-        description: 'Extra long sparklers for longer burn time',
-        pack: '5 pcs',
-        retailPrice: 40,
-        wholesalePrice: 30,
-        minQty: 20,
-        image: CRACKER_IMAGES.sparkler,
-        featured: false,
-        isGreen: false
-    },
-    {
-        id: 17,
-        name: 'Rainbow Sparklers',
-        category: 'sparklers',
-        description: 'Multi-color changing sparklers',
-        pack: '10 pcs',
-        retailPrice: 60,
-        wholesalePrice: 45,
-        minQty: 20,
-        image: CRACKER_IMAGES.sparkler,
-        featured: false,
-        isGreen: false
-    },
-    {
-        id: 18,
-        name: 'Green Sparklers',
-        category: 'green',
-        description: 'Eco-friendly sparklers for kids',
-        pack: '10 pcs',
-        retailPrice: 40,
-        wholesalePrice: 30,
-        minQty: 20,
-        image: CRACKER_IMAGES.green,
-        featured: true,
-        isGreen: true
-    },
-
-    // ========== AERIAL SHOTS ==========
-    {
-        id: 19,
-        name: '7 Shot Color',
-        category: 'aerial',
-        description: '7 continuous colorful aerial shots',
-        pack: '1 pc',
-        retailPrice: 250,
-        wholesalePrice: 200,
-        minQty: 5,
-        image: CRACKER_IMAGES.aerial,
-        featured: true,
-        isGreen: false
-    },
-    {
-        id: 20,
-        name: '12 Shot Crackling',
-        category: 'aerial',
-        description: '12 shots with crackling effects',
-        pack: '1 pc',
-        retailPrice: 400,
-        wholesalePrice: 320,
-        minQty: 5,
-        image: CRACKER_IMAGES.aerial,
-        featured: false,
-        isGreen: false
-    },
-    {
-        id: 21,
-        name: '21 Shot Multicolor',
-        category: 'aerial',
-        description: 'Premium 21 shots with various effects',
-        pack: '1 pc',
-        retailPrice: 700,
-        wholesalePrice: 560,
-        minQty: 5,
-        image: CRACKER_IMAGES.aerial,
-        featured: true,
-        isGreen: false
-    },
-    {
-        id: 22,
-        name: '30 Shot Grand',
-        category: 'aerial',
-        description: 'Grand display with 30 powerful shots',
-        pack: '1 pc',
-        retailPrice: 1200,
-        wholesalePrice: 960,
-        minQty: 3,
-        image: CRACKER_IMAGES.aerial,
-        featured: false,
-        isGreen: false
-    },
-    {
-        id: 23,
-        name: '50 Shot Supreme',
-        category: 'aerial',
-        description: 'Ultimate 50 shot aerial display',
-        pack: '1 pc',
-        retailPrice: 2000,
-        wholesalePrice: 1600,
-        minQty: 2,
-        image: CRACKER_IMAGES.aerial,
-        featured: true,
-        isGreen: false
-    },
-
-    // ========== SOUND CRACKERS ==========
-    {
-        id: 24,
-        name: 'Atom Bomb',
-        category: 'bombs',
-        description: 'Loud sound cracker',
-        pack: '10 pcs',
-        retailPrice: 150,
-        wholesalePrice: 120,
-        minQty: 10,
-        image: CRACKER_IMAGES.bomb,
-        featured: false,
-        isGreen: false
-    },
-    {
-        id: 25,
-        name: 'Lakshmi Bomb',
-        category: 'bombs',
-        description: 'Classic Diwali bomb with powerful sound',
-        pack: '10 pcs',
-        retailPrice: 100,
-        wholesalePrice: 80,
-        minQty: 10,
-        image: CRACKER_IMAGES.bomb,
-        featured: true,
-        isGreen: false
-    },
-    {
-        id: 26,
-        name: 'Bullet Bomb',
-        category: 'bombs',
-        description: 'Compact bomb with sharp sound',
-        pack: '10 pcs',
-        retailPrice: 80,
-        wholesalePrice: 65,
-        minQty: 10,
-        image: CRACKER_IMAGES.bomb,
-        featured: false,
-        isGreen: false
-    },
-    {
-        id: 27,
-        name: 'Hydrogen Bomb',
-        category: 'bombs',
-        description: 'Extra loud with delayed fuse',
-        pack: '5 pcs',
-        retailPrice: 120,
-        wholesalePrice: 95,
-        minQty: 10,
-        image: CRACKER_IMAGES.bomb,
-        featured: false,
-        isGreen: false
-    },
-
-    // ========== FANCY ITEMS ==========
-    {
-        id: 28,
-        name: 'Pencil Firework',
-        category: 'fancy',
-        description: 'Colorful pencil-shaped firework',
-        pack: '5 pcs',
-        retailPrice: 80,
-        wholesalePrice: 65,
-        minQty: 10,
-        image: CRACKER_IMAGES.fancy,
-        featured: false,
-        isGreen: false
-    },
-    {
-        id: 29,
-        name: 'Magic Snake',
-        category: 'fancy',
-        description: 'Fun snake that grows from tablet',
-        pack: '5 pcs',
-        retailPrice: 30,
-        wholesalePrice: 22,
-        minQty: 20,
-        image: CRACKER_IMAGES.snake,
-        featured: false,
-        isGreen: false
-    },
-    {
-        id: 30,
-        name: 'Color Smoke',
-        category: 'fancy',
-        description: 'Colorful smoke bombs for fun',
-        pack: '5 pcs',
-        retailPrice: 100,
-        wholesalePrice: 80,
-        minQty: 10,
-        image: CRACKER_IMAGES.smoke,
-        featured: false,
-        isGreen: false
-    },
-    {
-        id: 31,
-        name: 'Flower Fountain',
-        category: 'fancy',
-        description: 'Beautiful fountain with flower effect',
-        pack: '3 pcs',
-        retailPrice: 200,
-        wholesalePrice: 160,
-        minQty: 5,
-        image: CRACKER_IMAGES.fountain,
-        featured: true,
-        isGreen: false
-    },
-    {
-        id: 32,
-        name: 'Twinkling Star',
-        category: 'fancy',
-        description: 'Star-shaped fountain with twinkle effect',
-        pack: '2 pcs',
-        retailPrice: 150,
-        wholesalePrice: 120,
-        minQty: 5,
-        image: CRACKER_IMAGES.fancy,
-        featured: false,
-        isGreen: false
-    },
-    {
-        id: 33,
-        name: 'Butterfly Cracker',
-        category: 'fancy',
-        description: 'Spinning butterfly with sparks',
-        pack: '5 pcs',
-        retailPrice: 180,
-        wholesalePrice: 145,
-        minQty: 5,
-        image: CRACKER_IMAGES.fancy,
-        featured: false,
-        isGreen: false
-    },
-
-    // ========== GIFT BOXES ==========
-    {
-        id: 34,
-        name: 'Family Pack',
-        category: 'gift-boxes',
-        description: 'Assorted crackers for family celebration - Contains: 10 Sparklers, 5 Ground Chakkars, 5 Flowerpots, 3 Rockets, 2 Fancy Items',
-        pack: '1 box (25 items)',
-        retailPrice: 500,
-        wholesalePrice: 400,
-        minQty: 5,
-        image: CRACKER_IMAGES.giftbox,
-        featured: true,
-        isGreen: false,
-        contents: ['10 Sparklers', '5 Ground Chakkars', '5 Flowerpots', '3 Rockets', '2 Fancy Items']
-    },
-    {
-        id: 35,
-        name: 'Deluxe Gift Box',
-        category: 'gift-boxes',
-        description: 'Premium gift box with variety of crackers - Contains: 20 Sparklers, 10 Ground Chakkars, 10 Flowerpots, 10 Rockets, 5 Aerial Shots, 5 Fancy Items',
-        pack: '1 box (60 items)',
-        retailPrice: 1000,
-        wholesalePrice: 800,
-        minQty: 3,
-        image: CRACKER_IMAGES.giftbox,
-        featured: true,
-        isGreen: false,
-        contents: ['20 Sparklers (Assorted)', '10 Ground Chakkars', '10 Flowerpots', '10 Rockets', '5 Aerial Shots', '5 Fancy Items']
-    },
-    {
-        id: 36,
-        name: 'Mega Combo',
-        category: 'gift-boxes',
-        description: 'Ultimate combo with all types of crackers for mega celebrations',
-        pack: '1 box (100+ items)',
-        retailPrice: 2000,
-        wholesalePrice: 1600,
-        minQty: 2,
-        image: CRACKER_IMAGES.giftbox,
-        featured: true,
-        isGreen: false,
-        contents: ['30 Sparklers (Premium)', '15 Ground Chakkars', '15 Flowerpots', '15 Rockets', '10 Aerial Shots', '10 Fancy Items', '5 Sound Crackers']
-    },
-    {
-        id: 37,
-        name: 'Kids Special Pack',
-        category: 'gift-boxes',
-        description: 'Safe and fun crackers specially for kids',
-        pack: '1 box (30 items)',
-        retailPrice: 300,
-        wholesalePrice: 240,
-        minQty: 5,
-        image: CRACKER_IMAGES.giftbox,
-        featured: false,
-        isGreen: false,
-        contents: ['15 Sparklers', '5 Magic Snakes', '5 Color Smoke', '5 Ground Chakkars']
-    },
-    {
-        id: 38,
-        name: 'Premium Collection',
-        category: 'gift-boxes',
-        description: 'High-end crackers for grand celebrations',
-        pack: '1 box (150+ items)',
-        retailPrice: 3000,
-        wholesalePrice: 2400,
-        minQty: 2,
-        image: CRACKER_IMAGES.giftbox,
-        featured: false,
-        isGreen: false,
-        contents: ['50 Sparklers (Premium)', '20 Ground Chakkars', '20 Flowerpots', '20 Rockets', '15 Aerial Shots', '15 Fancy Items', '10 Sound Crackers']
-    },
-    {
-        id: 39,
-        name: 'Green Family Pack',
-        category: 'gift-boxes',
-        description: 'Eco-friendly crackers combo for responsible celebration',
-        pack: '1 box (30 items)',
-        retailPrice: 600,
-        wholesalePrice: 480,
-        minQty: 5,
-        image: CRACKER_IMAGES.green,
-        featured: true,
-        isGreen: true,
-        contents: ['10 Green Sparklers', '5 Green Chakkars', '5 Green Flowerpots', '5 Green Rockets', '5 Eco Fancy Items']
-    },
-    {
-        id: 40,
-        name: 'Grand Celebration Box',
-        category: 'gift-boxes',
-        description: 'For society and community celebrations',
-        pack: '1 box (200+ items)',
-        retailPrice: 5000,
-        wholesalePrice: 4000,
-        minQty: 1,
-        image: CRACKER_IMAGES.giftbox,
-        featured: false,
-        isGreen: false,
-        contents: ['100 Sparklers', '30 Ground Chakkars', '30 Flowerpots', '30 Rockets', '20 Aerial Shots', '20 Fancy Items', '10 Sound Crackers']
-    },
-
-    // ========== GREEN CRACKERS ==========
-    {
-        id: 41,
-        name: 'Green Aerial 7 Shot',
-        category: 'green',
-        description: 'Eco-friendly 7 shot aerial with reduced emission',
-        pack: '1 pc',
-        retailPrice: 300,
-        wholesalePrice: 240,
-        minQty: 5,
-        image: CRACKER_IMAGES.green,
-        featured: false,
-        isGreen: true
-    },
-    {
-        id: 42,
-        name: 'Green Fountain',
-        category: 'green',
-        description: 'Low smoke fountain with beautiful colors',
-        pack: '3 pcs',
-        retailPrice: 220,
-        wholesalePrice: 175,
-        minQty: 5,
-        image: CRACKER_IMAGES.green,
-        featured: false,
-        isGreen: true
-    },
-    {
-        id: 43,
-        name: 'Green Fancy Shots',
-        category: 'green',
-        description: 'Eco-friendly fancy crackers with less pollution',
-        pack: '5 pcs',
-        retailPrice: 180,
-        wholesalePrice: 145,
-        minQty: 10,
-        image: CRACKER_IMAGES.green,
-        featured: false,
-        isGreen: true
-    }
+    { id: 1, name: 'Ground Chakkar Regular', category: 'chakkars', description: 'Classic ground spinner', pack: '10 pcs', retailPrice: 50, image: CRACKER_IMAGES.chakkar, featured: true, inStock: true, isBestSeller: true },
+    { id: 2, name: 'Deluxe Ground Chakkar', category: 'chakkars', description: 'Premium chakkar', pack: '10 pcs', retailPrice: 60, image: CRACKER_IMAGES.chakkar, featured: true, inStock: true },
+    { id: 3, name: 'Small Rocket', category: 'rockets', description: 'Whistling rocket', pack: '10 pcs', retailPrice: 100, image: CRACKER_IMAGES.rocket, featured: true, inStock: true, isBestSeller: true },
+    { id: 4, name: 'Whistling Rocket', category: 'rockets', description: 'Loud whistling rocket', pack: '10 pcs', retailPrice: 200, image: CRACKER_IMAGES.rocket, featured: true, inStock: true },
+    { id: 5, name: 'Multicolor Flowerpot', category: 'flowerpots', description: 'Beautiful fountain', pack: '5 pcs', retailPrice: 100, image: CRACKER_IMAGES.flowerpot, featured: true, inStock: true, isBestSeller: true },
+    { id: 6, name: 'Color Sparklers', category: 'sparklers', description: 'Hand sparklers', pack: '10 pcs', retailPrice: 30, image: CRACKER_IMAGES.sparkler, featured: true, inStock: true, isBestSeller: true },
+    { id: 7, name: 'Silver Sparklers', category: 'sparklers', description: 'Premium sparklers', pack: '10 pcs', retailPrice: 40, image: CRACKER_IMAGES.sparkler, featured: true, inStock: true },
+    { id: 8, name: '7 Shot Aerial', category: 'aerial', description: 'Multicolor aerial', pack: '1 pc', retailPrice: 350, image: CRACKER_IMAGES.aerial, featured: true, inStock: true, isBestSeller: true },
+    { id: 9, name: 'Atom Bomb', category: 'bombs', description: 'Loud sound cracker', pack: '10 pcs', retailPrice: 150, image: CRACKER_IMAGES.bomb, featured: false, inStock: true },
+    { id: 10, name: 'Magic Pencil', category: 'fancy', description: 'Color changing pencil', pack: '10 pcs', retailPrice: 80, image: CRACKER_IMAGES.fancy, featured: true, inStock: true },
+    { id: 11, name: 'Family Pack', category: 'giftboxes', description: 'Complete celebration pack', pack: '1 box', retailPrice: 500, originalPrice: 700, image: CRACKER_IMAGES.giftbox, featured: true, inStock: true, isBestSeller: true },
+    { id: 12, name: 'Deluxe Gift Box', category: 'giftboxes', description: 'Premium assorted box', pack: '1 box', retailPrice: 1000, originalPrice: 1400, image: CRACKER_IMAGES.giftbox, featured: true, inStock: true }
 ];
 
-// Initialize data in localStorage
-function initializeData() {
-    // Always reset to use local images
-    localStorage.setItem('mc_products', JSON.stringify(defaultProducts));
-    localStorage.setItem('mc_categories', JSON.stringify(defaultCategories));
+// Initialize Firebase and load products
+async function initializeFirebaseProducts() {
+    try {
+        // Dynamically import Firebase
+        const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
+        const { getFirestore, collection, getDocs } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
 
-    if (!localStorage.getItem('mc_whatsapp')) {
-        localStorage.setItem('mc_whatsapp', '919986954653');
-    }
-    if (!localStorage.getItem('mc_password')) {
-        localStorage.setItem('mc_password', 'admin123');
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        firebaseInitialized = true;
+
+        // Load products from Firebase
+        const productsSnapshot = await getDocs(collection(db, 'products'));
+        if (!productsSnapshot.empty) {
+            products = [];
+            productsSnapshot.forEach(doc => {
+                const data = doc.data();
+                products.push({
+                    id: doc.id,
+                    ...data,
+                    // Map Firebase fields to expected fields
+                    pack: data.quantity || data.pack,
+                    featured: data.isBestSeller || data.featured,
+                    image: data.image || CRACKER_IMAGES[data.category] || 'images/logo.png'
+                });
+            });
+            // Cache to localStorage
+            localStorage.setItem('firebaseProducts', JSON.stringify(products));
+            localStorage.setItem('firebaseProductsTime', Date.now().toString());
+            console.log('Products loaded from Firebase:', products.length);
+        }
+
+        // Load categories from Firebase
+        const categoriesSnapshot = await getDocs(collection(db, 'categories'));
+        if (!categoriesSnapshot.empty) {
+            categories = [];
+            categoriesSnapshot.forEach(doc => {
+                categories.push({ id: doc.id, ...doc.data() });
+            });
+            localStorage.setItem('firebaseCategories', JSON.stringify(categories));
+            console.log('Categories loaded from Firebase:', categories.length);
+        }
+
+        // Load settings from Firebase (for offer banner)
+        try {
+            const { doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+            const settingsDoc = await getDoc(doc(db, 'settings', 'shop'));
+            if (settingsDoc.exists()) {
+                const settings = settingsDoc.data();
+                localStorage.setItem('shopSettings', JSON.stringify(settings));
+                console.log('Settings loaded from Firebase');
+            }
+        } catch (e) {
+            console.log('Could not load settings:', e);
+        }
+
+        return true;
+    } catch (error) {
+        console.log('Firebase not available, using local data:', error.message);
+        return false;
     }
 }
 
-// Get products from localStorage
+// Load products (try Firebase first, then localStorage, then defaults)
+async function loadProducts() {
+    // Check localStorage cache first (valid for 5 minutes)
+    const cachedProducts = localStorage.getItem('firebaseProducts');
+    const cacheTime = localStorage.getItem('firebaseProductsTime');
+    const cacheValid = cacheTime && (Date.now() - parseInt(cacheTime)) < 300000; // 5 minutes
+
+    if (cachedProducts && cacheValid) {
+        products = JSON.parse(cachedProducts);
+        console.log('Products loaded from cache:', products.length);
+    }
+
+    // Try to refresh from Firebase in background
+    try {
+        await initializeFirebaseProducts();
+    } catch (e) {
+        console.log('Using cached/default products');
+    }
+
+    // If still no products, use defaults
+    if (products.length === 0) {
+        products = defaultProducts;
+        console.log('Using default products');
+    }
+
+    // Load categories
+    const cachedCategories = localStorage.getItem('firebaseCategories');
+    if (cachedCategories) {
+        categories = JSON.parse(cachedCategories);
+    }
+    if (categories.length === 0) {
+        categories = defaultCategories;
+    }
+
+    return products;
+}
+
+// Get all products
 function getProducts() {
-    initializeData();
-    return JSON.parse(localStorage.getItem('mc_products'));
+    if (products.length === 0) {
+        // Try cache
+        const cached = localStorage.getItem('firebaseProducts');
+        if (cached) {
+            products = JSON.parse(cached);
+        } else {
+            products = defaultProducts;
+        }
+    }
+    return products;
 }
 
-// Get categories from localStorage
+// Get all categories
 function getCategories() {
-    initializeData();
-    return JSON.parse(localStorage.getItem('mc_categories'));
-}
-
-// Get WhatsApp number
-function getWhatsAppNumber() {
-    initializeData();
-    return localStorage.getItem('mc_whatsapp');
-}
-
-// Save products
-function saveProducts(products) {
-    localStorage.setItem('mc_products', JSON.stringify(products));
-}
-
-// Save categories
-function saveCategories(categories) {
-    localStorage.setItem('mc_categories', JSON.stringify(categories));
+    if (categories.length === 0) {
+        const cached = localStorage.getItem('firebaseCategories');
+        if (cached) {
+            categories = JSON.parse(cached);
+        } else {
+            categories = defaultCategories;
+        }
+    }
+    return categories;
 }
 
 // Get featured products
 function getFeaturedProducts() {
-    const products = getProducts();
-    return products.filter(p => p.featured).slice(0, 8);
+    const allProducts = getProducts();
+    return allProducts.filter(p => p.featured || p.isBestSeller).slice(0, 8);
 }
 
-// Get green crackers
-function getGreenProducts() {
-    const products = getProducts();
-    return products.filter(p => p.isGreen === true);
+// Get products by category
+function getProductsByCategory(category) {
+    const allProducts = getProducts();
+    if (!category || category === 'all') return allProducts;
+    return allProducts.filter(p => p.category === category || p.category === category.toLowerCase());
 }
+
+// Get single product by ID
+function getProductById(id) {
+    const allProducts = getProducts();
+    return allProducts.find(p => p.id === id || p.id === String(id));
+}
+
+// Search products
+function searchProducts(query) {
+    const allProducts = getProducts();
+    const searchTerm = query.toLowerCase();
+    return allProducts.filter(p =>
+        p.name.toLowerCase().includes(searchTerm) ||
+        (p.description && p.description.toLowerCase().includes(searchTerm)) ||
+        p.category.toLowerCase().includes(searchTerm)
+    );
+}
+
 
 // Get gift boxes
 function getGiftBoxes() {
-    const products = getProducts();
-    return products.filter(p => p.category === 'gift-boxes');
-}
-
-// Get product by ID
-function getProductById(id) {
-    const products = getProducts();
-    return products.find(p => p.id === parseInt(id));
-}
-
-// Get category by slug
-function getCategoryBySlug(slug) {
-    const categories = getCategories();
-    return categories.find(c => c.slug === slug);
-}
-
-// Generate next product ID
-function getNextProductId() {
-    const products = getProducts();
-    if (products.length === 0) return 1;
-    return Math.max(...products.map(p => p.id)) + 1;
-}
-
-// Generate next category ID
-function getNextCategoryId() {
-    const categories = getCategories();
-    if (categories.length === 0) return 1;
-    return Math.max(...categories.map(c => c.id)) + 1;
+    const allProducts = getProducts();
+    return allProducts.filter(p => p.category === 'giftboxes' || p.category === 'gift-boxes');
 }
 
 // Create product card HTML
 function createProductCard(product) {
-    const categories = getCategories();
-    const category = categories.find(c => c.slug === product.category);
-    const categoryName = category ? category.name : product.category;
+    const isBestSeller = product.isBestSeller || product.featured;
+    const hasDiscount = product.originalPrice && product.originalPrice > product.retailPrice;
+
+    let badges = '';
+    if (isBestSeller) badges += '<span class="badge badge-popular">Best Seller</span>';
+
+    const priceHtml = hasDiscount
+        ? `<span class="original-price">₹${product.originalPrice}</span> <span class="current-price">₹${product.retailPrice}</span>`
+        : `<span class="current-price">₹${product.retailPrice}</span>`;
 
     return `
-        <div class="product-card" data-id="${product.id}">
+        <div class="product-card" data-category="${product.category}">
+            <div class="product-badges">${badges}</div>
             <div class="product-image">
-                ${product.image ?
-                    `<img src="${product.image}" alt="${product.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                     <div class="placeholder-fallback" style="display:none; width:100%; height:100%; align-items:center; justify-content:center; background: linear-gradient(135deg, #f5f5f5, #e0e0e0);">
-                        <i class="fas fa-fire-alt" style="font-size: 3rem; color: #ddd;"></i>
-                     </div>` :
-                    `<i class="fas fa-fire-alt placeholder-icon"></i>`
-                }
-                ${product.featured ? '<span class="product-badge">Best Seller</span>' : ''}
-                ${product.isGreen ? '<span class="product-badge" style="background: linear-gradient(135deg, #4caf50, #388e3c);"><i class="fas fa-leaf"></i> Green</span>' : ''}
+                <img src="${product.image || CRACKER_IMAGES[product.category] || 'images/logo.png'}"
+                     alt="${product.name}"
+                     loading="lazy"
+                     onerror="this.src='images/logo.png'">
             </div>
             <div class="product-info">
-                <h3>${product.name}</h3>
-                <p class="product-pack">${product.pack}</p>
-                <div class="product-prices">
-                    <div class="price-box retail">
-                        <span class="price-label">Retail</span>
-                        <span class="price-value">₹${product.retailPrice}</span>
-                    </div>
-                    <div class="price-box wholesale">
-                        <span class="price-label">Wholesale</span>
-                        <span class="price-value">₹${product.wholesalePrice}</span>
-                    </div>
+                <h3 class="product-name">${product.name}</h3>
+                <p class="product-pack">${product.pack || product.quantity || ''}</p>
+                <div class="product-price">
+                    ${priceHtml}
                 </div>
-                <div class="product-actions">
-                    <button class="btn btn-primary add-to-cart" data-id="${product.id}">
-                        <i class="fas fa-cart-plus"></i> Add to Cart
-                    </button>
-                </div>
+                <button class="btn btn-primary add-to-cart" data-id="${product.id}">
+                    <i class="fas fa-cart-plus"></i> Add to Cart
+                </button>
             </div>
         </div>
     `;
 }
 
+// Create category card HTML
+function createCategoryCard(category, productCount) {
+    const iconMap = {
+        'chakkars': 'fa-circle-notch',
+        'rockets': 'fa-rocket',
+        'flowerpots': 'fa-seedling',
+        'sparklers': 'fa-magic',
+        'aerial': 'fa-star',
+        'bombs': 'fa-bomb',
+        'fancy': 'fa-wand-magic-sparkles',
+        'giftboxes': 'fa-gift',
+        'green': 'fa-leaf'
+    };
+
+    const imageMap = {
+        'chakkars': 'images/chakkar.png',
+        'rockets': 'images/rocket.png',
+        'flowerpots': 'images/flowerpot.png',
+        'sparklers': 'images/sparkler.png',
+        'aerial': 'images/aerial.png',
+        'bombs': 'images/bomb.png',
+        'fancy': 'images/fancy.png',
+        'giftboxes': 'images/giftbox.png',
+        'green': 'images/green-crackers.png'
+    };
+
+    const catId = category.id || category.slug;
+    const icon = category.icon || iconMap[catId] || 'fa-box';
+    const image = category.image || imageMap[catId] || 'images/logo.png';
+    const link = catId === 'giftboxes' ? 'gift-boxes.html' : `catalog.html?category=${catId}`;
+
+    return `
+        <a href="${link}" class="category-card">
+            <div class="category-img">
+                <img src="${image}" alt="${category.name}" onerror="this.src='images/logo.png'">
+            </div>
+            <div class="category-overlay">
+                <i class="fas ${icon}"></i>
+            </div>
+            <h3>${category.name}</h3>
+            <span class="category-count">${productCount} Items</span>
+        </a>
+    `;
+}
+
+// Render categories on home page
+function renderCategories() {
+    const categoryGrid = document.getElementById('categoryGrid');
+    if (!categoryGrid) return;
+
+    const allCategories = getCategories();
+    const allProducts = getProducts();
+
+    if (allCategories.length === 0) {
+        categoryGrid.innerHTML = '<p style="text-align:center; color:#666; padding:40px;">No categories available. Add categories in admin panel.</p>';
+        return;
+    }
+
+    // Filter out green crackers category if it exists
+    const filteredCategories = allCategories.filter(cat => {
+        const catId = (cat.id || cat.slug || '').toLowerCase();
+        return catId !== 'green';
+    });
+
+    categoryGrid.innerHTML = filteredCategories.map(cat => {
+        const catId = (cat.id || cat.slug || '').toLowerCase();
+        // Count products with case-insensitive matching
+        const count = allProducts.filter(p => (p.category || '').toLowerCase() === catId).length;
+        return createCategoryCard(cat, count);
+    }).join('');
+}
+
 // Initialize on page load
-initializeData();
+document.addEventListener('DOMContentLoaded', function() {
+    loadProducts().then(() => {
+        // Trigger custom event when products are loaded
+        window.dispatchEvent(new CustomEvent('productsLoaded'));
+
+        // Render categories on home page
+        renderCategories();
+
+        // Refresh featured products if on home page
+        const featuredContainer = document.getElementById('featuredProducts');
+        if (featuredContainer) {
+            const featured = getFeaturedProducts();
+            if (featured.length > 0) {
+                featuredContainer.innerHTML = featured.map(p => createProductCard(p)).join('');
+            } else {
+                featuredContainer.innerHTML = '<p style="text-align:center; color:#666; padding:40px;">No products available. Add products in admin panel.</p>';
+            }
+        }
+    });
+});
+
+// Force refresh products from Firebase
+async function refreshProducts() {
+    localStorage.removeItem('firebaseProducts');
+    localStorage.removeItem('firebaseProductsTime');
+    localStorage.removeItem('firebaseCategories');
+    await loadProducts();
+    window.location.reload();
+}
+
+// Export for use in other scripts
+window.getProducts = getProducts;
+window.getCategories = getCategories;
+window.getFeaturedProducts = getFeaturedProducts;
+window.getProductsByCategory = getProductsByCategory;
+window.getProductById = getProductById;
+window.searchProducts = searchProducts;
+window.getGiftBoxes = getGiftBoxes;
+window.createProductCard = createProductCard;
+window.createCategoryCard = createCategoryCard;
+window.renderCategories = renderCategories;
+window.refreshProducts = refreshProducts;
+window.loadProducts = loadProducts;
