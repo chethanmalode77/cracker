@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Madhu Crackers - Your trusted fireworks shop. Quality crackers for Deepawali and all celebrations.">
-    <meta name="keywords" content="crackers, fireworks, Deepawali, Diwali, buy crackers online, Madhu Crackers">
-    <title>Madhu Crackers - Premium Fireworks | Deepawali Special Offers</title>
+    <meta name="description" content="Madhu Fireworks - Your trusted fireworks shop. Quality crackers for Deepawali and all celebrations.">
+    <meta name="keywords" content="crackers, fireworks, Deepawali, Diwali, buy crackers online, Madhu Fireworks">
+    <title>Madhu Fireworks - Premium Fireworks | Deepawali Special Offers</title>
     <link rel="icon" type="image/svg+xml" href="images/logo.svg">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -19,9 +19,9 @@
     <nav class="navbar">
         <div class="nav-container">
             <a href="index.html" class="logo">
-                <img src="images/logo.svg" alt="Madhu Crackers" class="logo-img" style="width:45px;height:45px;">
+                <img src="images/logo.svg" alt="Madhu Fireworks" class="logo-img" style="width:45px;height:45px;">
                 <div class="logo-text">
-                    <span class="brand-name">Madhu Crackers</span>
+                    <span class="brand-name">Madhu Fireworks</span>
                     <span class="brand-tagline">Light Up Your Life!</span>
                 </div>
             </a>
@@ -80,7 +80,7 @@
             </div>
             <h1 class="hero-title">
                 <span class="text-gradient">Celebrate Deepawali</span>
-                <span class="text-white">with Madhu Crackers!</span>
+                <span class="text-white">with Madhu Fireworks!</span>
             </h1>
             <p class="hero-subtitle">Your One-Stop Shop for Premium Quality Crackers</p>
             <p class="hero-desc">Premium Quality | Best Prices | Pan India Delivery</p>
@@ -379,7 +379,7 @@
         <div class="container">
             <div class="section-header">
                 <span class="section-badge"><i class="fas fa-trophy"></i> Why Us</span>
-                <h2 class="section-title">Why Choose Madhu Crackers?</h2>
+                <h2 class="section-title">Why Choose Madhu Fireworks?</h2>
                 <p class="section-subtitle">Your satisfaction is our priority</p>
             </div>
             <div class="features-grid">
@@ -498,7 +498,7 @@
                     <div class="footer-col brand-col">
                         <div class="footer-logo">
                             <i class="fas fa-fire-alt"></i>
-                            <span>Madhu Crackers</span>
+                            <span>Madhu Fireworks</span>
                         </div>
                         <p>Your trusted fireworks partner since 2019. Quality crackers for all your celebrations.</p>
                         <div class="social-links">
@@ -543,7 +543,7 @@
         </div>
         <div class="footer-bottom">
             <div class="container">
-                <p>&copy; 2019 Madhu Crackers. All Rights Reserved.</p>
+                <p>&copy; 2019 Madhu Fireworks. All Rights Reserved.</p>
                 <p class="disclaimer"><i class="fas fa-exclamation-triangle"></i> Fireworks should be used responsibly by adults. Keep away from children. Follow all safety guidelines.</p>
                 <div class="legal-disclaimer" style="margin-top: 15px; padding: 15px; background: rgba(255,255,255,0.1); border-radius: 8px; font-size: 12px; line-height: 1.6;">
                     <p style="color: #ffc107; font-weight: 600; margin-bottom: 8px;"><i class="fas fa-gavel"></i> LEGAL DISCLAIMER (As per Supreme Court of India Guidelines)</p>
@@ -575,9 +575,81 @@
     <script src="js/main.js"></script>
     <script src="js/animations.js"></script>
 
-    <!-- Load Gift Boxes from Firebase -->
+    <!-- Load Gift Boxes and Settings from Firebase -->
     <script type="module">
-        import { getGiftBoxes } from './js/firebase-products.js';
+        import { getGiftBoxes, getSettings } from './js/firebase-products.js';
+
+        // Load and apply settings from Firebase
+        async function loadAndApplySettings() {
+            try {
+                const settings = await getSettings();
+                if (!settings) return;
+
+                // Save to localStorage for other scripts (countdown, etc.)
+                localStorage.setItem('shopSettings', JSON.stringify(settings));
+
+                // Apply offer banner visibility
+                const offerBanner = document.querySelector('.offer-banner');
+                if (offerBanner) {
+                    if (settings.offerActive === false) {
+                        offerBanner.style.display = 'none';
+                    } else {
+                        offerBanner.style.display = 'block';
+                    }
+                }
+
+                // Apply offer title
+                const offerTitleEl = document.getElementById('offerTitle');
+                if (offerTitleEl && settings.offerTitle) {
+                    offerTitleEl.textContent = settings.offerTitle;
+                }
+
+                // Apply WhatsApp number to all WhatsApp links
+                if (settings.whatsappNumber) {
+                    document.querySelectorAll('a[href*="wa.me"]').forEach(link => {
+                        const currentHref = link.getAttribute('href');
+                        const textMatch = currentHref.match(/\?text=(.*)$/);
+                        const textParam = textMatch ? textMatch[0] : '';
+                        link.setAttribute('href', `https://wa.me/${settings.whatsappNumber}${textParam}`);
+                    });
+                }
+
+                // Apply phone number
+                if (settings.phoneNumber) {
+                    document.querySelectorAll('a[href^="tel:"]').forEach(link => {
+                        link.setAttribute('href', `tel:${settings.phoneNumber.replace(/\s/g, '')}`);
+                        link.textContent = settings.phoneNumber;
+                    });
+                    document.querySelectorAll('.contact-info p').forEach(p => {
+                        if (p.innerHTML.includes('fa-phone')) {
+                            p.innerHTML = `<i class="fas fa-phone"></i> <a href="tel:${settings.phoneNumber.replace(/\s/g, '')}">${settings.phoneNumber}</a>`;
+                        }
+                    });
+                }
+
+                // Apply address
+                if (settings.shopAddress) {
+                    document.querySelectorAll('.contact-info p').forEach(p => {
+                        if (p.innerHTML.includes('fa-map-marker-alt')) {
+                            p.innerHTML = `<i class="fas fa-map-marker-alt"></i> ${settings.shopAddress}`;
+                        }
+                    });
+                }
+
+                // Apply working hours
+                if (settings.workingHours) {
+                    document.querySelectorAll('.contact-info p').forEach(p => {
+                        if (p.innerHTML.includes('fa-clock')) {
+                            p.innerHTML = `<i class="fas fa-clock"></i> ${settings.workingHours}`;
+                        }
+                    });
+                }
+
+                console.log('Settings applied from Firebase');
+            } catch (error) {
+                console.error('Error loading settings:', error);
+            }
+        }
 
         async function loadHomeGiftBoxes() {
             try {
@@ -678,10 +750,14 @@
             }
         }
 
-        // Load gift boxes when DOM is ready
+        // Load settings and gift boxes when DOM is ready
         if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', loadHomeGiftBoxes);
+            document.addEventListener('DOMContentLoaded', () => {
+                loadAndApplySettings();
+                loadHomeGiftBoxes();
+            });
         } else {
+            loadAndApplySettings();
             loadHomeGiftBoxes();
         }
     </script>
