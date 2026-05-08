@@ -1,5 +1,5 @@
 // ================================
-// Madhu Crackers - Cart Functions
+// Madhu Fireworks - Cart Functions
 // ================================
 
 // Get cart from localStorage
@@ -121,7 +121,7 @@ function generateWhatsAppMessage() {
         return null;
     }
 
-    let message = `*New Order from Madhu Crackers Website*\n\n`;
+    let message = `*New Order from Madhu Fireworks Website*\n\n`;
     message += `*Order Items:*\n`;
     message += `━━━━━━━━━━━━━━━━━━━━\n`;
 
