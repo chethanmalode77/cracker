@@ -1,5 +1,5 @@
 // ================================
-// Manish Crackers - Animations & Effects
+// Madhu Crackers - Animations & Effects
 // ================================
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -11,19 +11,55 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // ================================
-// Diwali Countdown Timer
+// Deepawali Countdown Timer
 // ================================
 function initCountdown() {
-    // Set Diwali date (update this each year)
-    // For 2024, Diwali is on November 1st
-    const diwaliDate = new Date('November 1, 2024 00:00:00').getTime();
+    // Try to get offer settings from Firebase settings (via localStorage cache)
+    let targetDate;
+    let offerTitle = null;
+
+    try {
+        // Check both possible localStorage keys for settings
+        const cachedSettings = localStorage.getItem('shopSettings') || localStorage.getItem('firebaseSettings');
+        if (cachedSettings) {
+            const settings = JSON.parse(cachedSettings);
+
+            // Get offer title if available
+            if (settings.offerTitle) {
+                offerTitle = settings.offerTitle;
+                const offerTitleEl = document.getElementById('offerTitle');
+                if (offerTitleEl) {
+                    offerTitleEl.textContent = offerTitle;
+                }
+            }
+
+            if (settings.offerEndDate) {
+                // Parse date in YYYY-MM-DD format
+                const dateParts = settings.offerEndDate.split('-');
+                if (dateParts.length === 3) {
+                    targetDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2], 23, 59, 59).getTime();
+                } else {
+                    targetDate = new Date(settings.offerEndDate + 'T23:59:59').getTime();
+                }
+                console.log('Offer end date from settings:', settings.offerEndDate, 'Target:', new Date(targetDate));
+            }
+        }
+    } catch (e) {
+        console.log('Using default Deepawali date:', e);
+    }
+
+    // Default to Deepawali 2025 (October 20, 2025) if no setting found
+    if (!targetDate || isNaN(targetDate)) {
+        targetDate = new Date(2025, 9, 20, 23, 59, 59).getTime(); // October is month 9 (0-indexed)
+        console.log('Using default Deepawali 2025 date');
+    }
 
     function updateCountdown() {
         const now = new Date().getTime();
-        const distance = diwaliDate - now;
+        const distance = targetDate - now;
 
         if (distance < 0) {
-            // If Diwali has passed, show next year's or just show 00
+            // If date has passed, show zeros
             document.getElementById('days').textContent = '00';
             document.getElementById('hours').textContent = '00';
             document.getElementById('minutes').textContent = '00';
