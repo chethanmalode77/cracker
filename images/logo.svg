@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="fireGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ff4500"/>
+      <stop offset="50%" style="stop-color:#ff6b35"/>
+      <stop offset="100%" style="stop-color:#ffd700"/>
+    </linearGradient>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e"/>
+      <stop offset="100%" style="stop-color:#16213e"/>
+    </linearGradient>
+  </defs>
+  <!-- Background Circle -->
+  <circle cx="50" cy="50" r="48" fill="url(#bgGrad)" stroke="#ff6b35" stroke-width="2"/>
+  <!-- Firecracker/Sparkle Design -->
+  <g transform="translate(50,50)">
+    <!-- Center burst -->
+    <circle cx="0" cy="0" r="8" fill="#ffd700"/>
+    <!-- Sparkle rays -->
+    <g fill="url(#fireGrad)">
+      <path d="M0,-35 L3,-12 L0,-8 L-3,-12 Z"/>
+      <path d="M0,35 L3,12 L0,8 L-3,12 Z" />
+      <path d="M-35,0 L-12,3 L-8,0 L-12,-3 Z"/>
+      <path d="M35,0 L12,3 L8,0 L12,-3 Z"/>
+      <path d="M-25,-25 L-10,-8 L-6,-6 L-8,-10 Z"/>
+      <path d="M25,25 L10,8 L6,6 L8,10 Z"/>
+      <path d="M25,-25 L10,-8 L6,-6 L8,-10 Z"/>
+      <path d="M-25,25 L-10,8 L-6,6 L-8,10 Z"/>
+    </g>
+    <!-- Inner glow -->
+    <circle cx="0" cy="0" r="5" fill="#fff"/>
+  </g>
+  <!-- M Letter -->
+  <text x="50" y="58" font-size="24" font-weight="bold" text-anchor="middle" fill="#fff" font-family="Arial Black, Arial, sans-serif">M</text>
+</svg>
