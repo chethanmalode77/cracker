@@ -1,5 +1,5 @@
 // ================================
-// Manish Crackers - Main JavaScript
+// Madhu Crackers - Main JavaScript
 // ================================
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -88,7 +88,7 @@ function initAddToCart() {
         const addBtn = e.target.closest('.add-to-cart');
         if (addBtn) {
             e.preventDefault();
-            const productId = parseInt(addBtn.dataset.id);
+            const productId = addBtn.dataset.id;
 
             if (productId) {
                 addToCart(productId);
@@ -234,6 +234,5 @@ function getUrlParam(param) {
 // ================================
 // Console Welcome Message
 // ================================
-console.log('%c🎆 Manish Crackers', 'font-size: 24px; font-weight: bold; color: #ff6b35;');
-console.log('%cWelcome to Manish Crackers! Light up your celebrations!', 'font-size: 14px; color: #666;');
-
+console.log('%c🎆 Madhu Crackers', 'font-size: 24px; font-weight: bold; color: #ff6b35;');
+console.log('%cWelcome to Madhu Crackers! Light up your celebrations!', 'font-size: 14px; color: #666;');
