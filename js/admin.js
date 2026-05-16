@@ -1,5 +1,5 @@
 // ================================
-// Manish Crackers - Admin Panel
+// Madhu Fireworks - Admin Panel
 // ================================
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -170,8 +170,7 @@ function loadProductsTable() {
                 <td>${product.name}</td>
                 <td>${categoryName}</td>
                 <td>₹${product.retailPrice}</td>
-                <td>₹${product.wholesalePrice}</td>
-                <td>${product.minQty}</td>
+                <td>${product.pack || '-'}</td>
                 <td class="actions">
                     <button class="edit-btn" onclick="editProduct(${product.id})">
                         <i class="fas fa-edit"></i>
@@ -245,8 +244,6 @@ function openProductModal(productId = null) {
         document.getElementById('productCategory').value = product.category;
         document.getElementById('productDescription').value = product.description || '';
         document.getElementById('productRetailPrice').value = product.retailPrice;
-        document.getElementById('productWholesalePrice').value = product.wholesalePrice;
-        document.getElementById('productMinQty').value = product.minQty;
         document.getElementById('productPack').value = product.pack || '';
         document.getElementById('productImage').value = product.image || '';
         document.getElementById('productFeatured').checked = product.featured;
@@ -255,7 +252,6 @@ function openProductModal(productId = null) {
         title.textContent = 'Add Product';
         form.reset();
         document.getElementById('productId').value = '';
-        document.getElementById('productMinQty').value = 10;
     }
 
     modal.classList.add('active');
@@ -276,8 +272,6 @@ function saveProduct(e) {
         category: document.getElementById('productCategory').value,
         description: document.getElementById('productDescription').value,
         retailPrice: parseInt(document.getElementById('productRetailPrice').value),
-        wholesalePrice: parseInt(document.getElementById('productWholesalePrice').value),
-        minQty: parseInt(document.getElementById('productMinQty').value),
         pack: document.getElementById('productPack').value,
         image: document.getElementById('productImage').value,
         featured: document.getElementById('productFeatured').checked
