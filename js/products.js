@@ -72,10 +72,16 @@ const defaultProducts = [
 async function initializeFirebaseProducts() {
     try {
         // Dynamically import Firebase
-        const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
+        const { initializeApp, getApps, getApp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
         const { getFirestore, collection, getDocs } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
 
-        const app = initializeApp(firebaseConfig);
+        // Check if Firebase app already exists to avoid duplicate initialization
+        let app;
+        if (getApps().length === 0) {
+            app = initializeApp(firebaseConfig);
+        } else {
+            app = getApp();
+        }
         const db = getFirestore(app);
         firebaseInitialized = true;
 
@@ -113,8 +119,8 @@ async function initializeFirebaseProducts() {
 
         // Load settings from Firebase (for offer banner)
         try {
-            const { doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
-            const settingsDoc = await getDoc(doc(db, 'settings', 'shop'));
+            const firestore = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+            const settingsDoc = await firestore.getDoc(firestore.doc(db, 'settings', 'shop'));
             if (settingsDoc.exists()) {
                 const settings = settingsDoc.data();
                 localStorage.setItem('shopSettings', JSON.stringify(settings));
