@@ -6,13 +6,22 @@ import {
     onAuthStateChanged
 } from './firebase-config.js';
 
-// Admin email (only this email can access admin panel)
-const ADMIN_EMAIL = 'chethanmalode.1si16is016@gmail.com';
+// Admin emails (these emails can access admin panel)
+const ADMIN_EMAILS = [
+    'chethanmalode.1si16is016@gmail.com',
+    'fireworksmadhu@gmail.com',
+    'manish.vadhone@gmail.com'
+];
+
+// Check if email is admin
+function isAdminEmail(email) {
+    return ADMIN_EMAILS.includes(email.toLowerCase());
+}
 
 // Login function
 async function adminLogin(email, password) {
     try {
-        if (email !== ADMIN_EMAIL) {
+        if (!isAdminEmail(email)) {
             return { success: false, error: 'Unauthorized email. Only admin can login.' };
         }
 
@@ -57,7 +66,7 @@ async function adminLogout() {
 
 // Check if user is logged in
 function isLoggedIn() {
-    return auth.currentUser !== null && auth.currentUser.email === ADMIN_EMAIL;
+    return auth.currentUser !== null && isAdminEmail(auth.currentUser.email);
 }
 
 // Get current user
@@ -68,7 +77,7 @@ function getCurrentUser() {
 // Auth state listener
 function onAuthChange(callback) {
     return onAuthStateChanged(auth, (user) => {
-        if (user && user.email === ADMIN_EMAIL) {
+        if (user && isAdminEmail(user.email)) {
             callback(user);
         } else {
             callback(null);
@@ -82,5 +91,6 @@ export {
     isLoggedIn,
     getCurrentUser,
     onAuthChange,
-    ADMIN_EMAIL
+    ADMIN_EMAILS,
+    isAdminEmail
 };
