@@ -1,5 +1,5 @@
 // ================================
-// Madhu Crackers - Products Data
+// Madhu Fireworks - Products Data
 // Loads from Firebase with localStorage fallback
 // ================================
 
@@ -131,23 +131,24 @@ async function initializeFirebaseProducts() {
     }
 }
 
-// Load products (try Firebase first, then localStorage, then defaults)
+// Load products (always try Firebase first, cache only as fallback)
 async function loadProducts() {
-    // Check localStorage cache first (valid for 5 minutes)
-    const cachedProducts = localStorage.getItem('firebaseProducts');
-    const cacheTime = localStorage.getItem('firebaseProductsTime');
-    const cacheValid = cacheTime && (Date.now() - parseInt(cacheTime)) < 300000; // 5 minutes
-
-    if (cachedProducts && cacheValid) {
-        products = JSON.parse(cachedProducts);
-        console.log('Products loaded from cache:', products.length);
+    // Always try to fetch fresh from Firebase first
+    try {
+        const success = await initializeFirebaseProducts();
+        if (success && products.length > 0) {
+            console.log('Products loaded fresh from Firebase:', products.length);
+            return products;
+        }
+    } catch (e) {
+        console.log('Firebase fetch failed, checking cache:', e.message);
     }
 
-    // Try to refresh from Firebase in background
-    try {
-        await initializeFirebaseProducts();
-    } catch (e) {
-        console.log('Using cached/default products');
+    // Fallback to localStorage cache if Firebase fails
+    const cachedProducts = localStorage.getItem('firebaseProducts');
+    if (cachedProducts) {
+        products = JSON.parse(cachedProducts);
+        console.log('Products loaded from cache:', products.length);
     }
 
     // If still no products, use defaults
@@ -170,16 +171,20 @@ async function loadProducts() {
 
 // Get all products
 function getProducts() {
-    if (products.length === 0) {
-        // Try cache
-        const cached = localStorage.getItem('firebaseProducts');
-        if (cached) {
-            products = JSON.parse(cached);
-        } else {
-            products = defaultProducts;
-        }
+    // If products already loaded in memory, return them
+    if (products.length > 0) {
+        return products;
     }
-    return products;
+
+    // Try cache as fallback
+    const cached = localStorage.getItem('firebaseProducts');
+    if (cached) {
+        products = JSON.parse(cached);
+        return products;
+    }
+
+    // Last resort: defaults
+    return defaultProducts;
 }
 
 // Get all categories
@@ -341,6 +346,16 @@ function renderCategories() {
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
+    // Check if coming from admin (force refresh)
+    const referrer = document.referrer;
+    if (referrer && referrer.includes('admin.html')) {
+        console.log('Coming from admin, clearing cache...');
+        localStorage.removeItem('firebaseProducts');
+        localStorage.removeItem('firebaseProductsTime');
+        localStorage.removeItem('firebaseCategories');
+        localStorage.removeItem('shopSettings');
+    }
+
     loadProducts().then(() => {
         // Trigger custom event when products are loaded
         window.dispatchEvent(new CustomEvent('productsLoaded'));
