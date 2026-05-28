@@ -1137,11 +1137,11 @@
                             <div class="form-row">
                                 <div class="form-group">
                                     <label>WhatsApp Number (with country code)</label>
-                                    <input type="text" id="whatsappNumber" value="919986954653" placeholder="919986954653">
+                                    <input type="text" id="whatsappNumber" value="918867556005" placeholder="918867556005">
                                 </div>
                                 <div class="form-group">
                                     <label>Phone Number</label>
-                                    <input type="text" id="phoneNumber" placeholder="+91 99269 54653">
+                                    <input type="text" id="phoneNumber" placeholder="+91 88675 56005">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -1165,24 +1165,30 @@
                     </div>
 
                     <div class="settings-card">
-                        <h3><i class="fas fa-percent"></i> Deepawali Offer Settings</h3>
+                        <h3><i class="fas fa-percent"></i> Offer Banner Settings</h3>
                         <form id="offerForm">
                             <div class="form-row">
+                                <div class="form-group">
+                                    <label>Offer Badge (e.g. DEEPAWALI SPECIAL, GANESH CHATURTHI)</label>
+                                    <input type="text" id="offerBadge" value="DEEPAWALI SPECIAL" placeholder="DEEPAWALI SPECIAL">
+                                </div>
                                 <div class="form-group">
                                     <label>Offer Title</label>
                                     <input type="text" id="offerTitle" value="Up to 40% OFF on Bulk Orders">
                                 </div>
+                            </div>
+                            <div class="form-row">
                                 <div class="form-group">
                                     <label>Offer End Date</label>
                                     <input type="date" id="offerEndDate">
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="toggle-switch">
-                                    <input type="checkbox" id="offerActive" checked>
-                                    <span class="toggle-slider"></span>
-                                    <span>Offer Active</span>
-                                </label>
+                                <div class="form-group">
+                                    <label class="toggle-switch" style="margin-top: 25px;">
+                                        <input type="checkbox" id="offerActive" checked>
+                                        <span class="toggle-slider"></span>
+                                        <span>Offer Active</span>
+                                    </label>
+                                </div>
                             </div>
                             <button type="submit" class="btn btn-primary">
                                 <i class="fas fa-save"></i> Save Offer Settings
@@ -2203,11 +2209,12 @@
             if (settings) {
                 document.getElementById('shopName').value = settings.shopName || 'Madhu Fireworks';
                 document.getElementById('proprietorName').value = settings.proprietorName || 'Madhu';
-                document.getElementById('whatsappNumber').value = settings.whatsappNumber || '919986954653';
+                document.getElementById('whatsappNumber').value = settings.whatsappNumber || '918867556005';
                 document.getElementById('phoneNumber').value = settings.phoneNumber || '';
                 document.getElementById('shopAddress').value = settings.shopAddress || '';
                 document.getElementById('shopEmail').value = settings.shopEmail || '';
                 document.getElementById('workingHours').value = settings.workingHours || '9:00 AM - 9:00 PM';
+                document.getElementById('offerBadge').value = settings.offerBadge || 'DEEPAWALI SPECIAL';
                 document.getElementById('offerTitle').value = settings.offerTitle || 'Up to 40% OFF on Bulk Orders';
                 document.getElementById('offerEndDate').value = settings.offerEndDate || '';
                 document.getElementById('offerActive').checked = settings.offerActive !== false;
@@ -2245,6 +2252,7 @@
             showLoading();
 
             const offerData = {
+                offerBadge: document.getElementById('offerBadge').value,
                 offerTitle: document.getElementById('offerTitle').value,
                 offerEndDate: document.getElementById('offerEndDate').value,
                 offerActive: document.getElementById('offerActive').checked
