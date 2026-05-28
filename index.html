@@ -49,7 +49,7 @@
     <div class="offer-banner">
         <div class="offer-content">
             <div class="offer-text">
-                <span class="offer-badge pulse">DEEPAWALI SPECIAL</span>
+                <span class="offer-badge pulse" id="offerBadge">DEEPAWALI SPECIAL</span>
                 <span class="offer-discount" id="offerTitle">Up to 40% OFF on Bulk Orders!</span>
             </div>
             <div class="offer-countdown">
@@ -596,6 +596,12 @@
                     } else {
                         offerBanner.style.display = 'block';
                     }
+                }
+
+                // Apply offer badge
+                const offerBadgeEl = document.getElementById('offerBadge');
+                if (offerBadgeEl && settings.offerBadge) {
+                    offerBadgeEl.textContent = settings.offerBadge;
                 }
 
                 // Apply offer title
