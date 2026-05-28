@@ -256,16 +256,17 @@ function createProductCard(product) {
         : `<span class="current-price">₹${product.retailPrice}</span>`;
 
     return `
-        <div class="product-card" data-category="${product.category}">
+        <div class="product-card" data-category="${product.category}" data-product-id="${product.id}">
             <div class="product-badges">${badges}</div>
-            <div class="product-image">
+            <div class="product-image product-clickable" data-id="${product.id}">
                 <img src="${product.image || CRACKER_IMAGES[product.category] || 'images/logo.png'}"
                      alt="${product.name}"
                      loading="lazy"
                      onerror="this.src='images/logo.png'">
+                <div class="product-overlay"><i class="fas fa-eye"></i> View Details</div>
             </div>
             <div class="product-info">
-                <h3 class="product-name">${product.name}</h3>
+                <h3 class="product-name product-clickable" data-id="${product.id}">${product.name}</h3>
                 <p class="product-pack">${product.pack || product.quantity || ''}</p>
                 <div class="product-price">
                     ${priceHtml}
@@ -277,6 +278,103 @@ function createProductCard(product) {
         </div>
     `;
 }
+
+// Show product detail popup
+function showProductPopup(productId) {
+    const product = getProductById(productId);
+    if (!product) return;
+
+    // Remove existing popup if any
+    const existingPopup = document.getElementById('productPopup');
+    if (existingPopup) existingPopup.remove();
+
+    const hasDiscount = product.originalPrice && product.originalPrice > product.retailPrice;
+    const priceHtml = hasDiscount
+        ? `<span class="popup-original-price">₹${product.originalPrice}</span> <span class="popup-sale-price">₹${product.retailPrice}</span>`
+        : `<span class="popup-sale-price">₹${product.retailPrice}</span>`;
+
+    const popup = document.createElement('div');
+    popup.id = 'productPopup';
+    popup.className = 'product-popup-overlay';
+    popup.innerHTML = `
+        <div class="product-popup">
+            <button class="popup-close" onclick="closeProductPopup()"><i class="fas fa-times"></i></button>
+            <div class="popup-content">
+                <div class="popup-image">
+                    <img src="${product.image || CRACKER_IMAGES[product.category] || 'images/logo.png'}"
+                         alt="${product.name}"
+                         onerror="this.src='images/logo.png'">
+                </div>
+                <div class="popup-details">
+                    <h2>${product.name}</h2>
+                    <p class="popup-category"><i class="fas fa-tag"></i> ${product.category}</p>
+                    <p class="popup-pack"><i class="fas fa-box"></i> ${product.pack || product.quantity || 'N/A'}</p>
+                    <div class="popup-price">${priceHtml}</div>
+                    <div class="popup-description">
+                        <h4><i class="fas fa-info-circle"></i> Description</h4>
+                        <p>${product.description || 'Quality firework product for your celebrations.'}</p>
+                    </div>
+                    <div class="popup-stock ${product.inStock !== false ? 'in-stock' : 'out-of-stock'}">
+                        <i class="fas fa-${product.inStock !== false ? 'check-circle' : 'times-circle'}"></i>
+                        ${product.inStock !== false ? 'In Stock' : 'Out of Stock'}
+                    </div>
+                    <button class="btn btn-primary btn-lg popup-add-cart" data-id="${product.id}" ${product.inStock === false ? 'disabled' : ''}>
+                        <i class="fas fa-cart-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(popup);
+    document.body.style.overflow = 'hidden';
+
+    // Close on overlay click
+    popup.addEventListener('click', function(e) {
+        if (e.target === popup) closeProductPopup();
+    });
+
+    // Close on Escape key
+    document.addEventListener('keydown', function escHandler(e) {
+        if (e.key === 'Escape') {
+            closeProductPopup();
+            document.removeEventListener('keydown', escHandler);
+        }
+    });
+
+    // Add to cart from popup
+    popup.querySelector('.popup-add-cart').addEventListener('click', function() {
+        const id = this.dataset.id;
+        const product = getProductById(id);
+        if (product && typeof addToCart === 'function') {
+            addToCart(product);
+            closeProductPopup();
+        }
+    });
+}
+
+// Close product popup
+function closeProductPopup() {
+    const popup = document.getElementById('productPopup');
+    if (popup) {
+        popup.remove();
+        document.body.style.overflow = '';
+    }
+}
+
+// Initialize product click handlers
+function initProductClickHandlers() {
+    document.addEventListener('click', function(e) {
+        const clickable = e.target.closest('.product-clickable');
+        if (clickable && !e.target.closest('.add-to-cart')) {
+            const productId = clickable.dataset.id;
+            if (productId) showProductPopup(productId);
+        }
+    });
+}
+
+// Initialize click handlers on DOM ready
+document.addEventListener('DOMContentLoaded', initProductClickHandlers);
 
 // Create category card HTML
 function createCategoryCard(category, productCount) {
@@ -404,3 +502,5 @@ window.createCategoryCard = createCategoryCard;
 window.renderCategories = renderCategories;
 window.refreshProducts = refreshProducts;
 window.loadProducts = loadProducts;
+window.showProductPopup = showProductPopup;
+window.closeProductPopup = closeProductPopup;
