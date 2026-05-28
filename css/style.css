@@ -2068,3 +2068,225 @@ img {
 .animate-slideInRight {
     animation: slideInRight 0.6s ease forwards;
 }
+
+/* ================================
+   Product Detail Popup
+   ================================ */
+.product-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    padding: 20px;
+    animation: fadeIn 0.3s ease;
+}
+
+.product-popup {
+    background: white;
+    border-radius: 20px;
+    max-width: 800px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    animation: slideInUp 0.3s ease;
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.popup-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: var(--bg-light);
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+    color: var(--text-color);
+    transition: var(--transition);
+    z-index: 10;
+}
+
+.popup-close:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+.popup-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+.popup-image {
+    padding: 30px;
+    background: var(--bg-light);
+    border-radius: 20px 0 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.popup-image img {
+    max-width: 100%;
+    max-height: 350px;
+    object-fit: contain;
+}
+
+.popup-details {
+    padding: 40px 30px 40px 0;
+}
+
+.popup-details h2 {
+    font-size: 1.8rem;
+    color: var(--dark-color);
+    margin-bottom: 15px;
+}
+
+.popup-category {
+    color: var(--primary-color);
+    font-weight: 500;
+    margin-bottom: 8px;
+    text-transform: capitalize;
+}
+
+.popup-pack {
+    color: var(--text-light);
+    margin-bottom: 15px;
+}
+
+.popup-price {
+    margin-bottom: 20px;
+}
+
+.popup-original-price {
+    text-decoration: line-through;
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    margin-right: 10px;
+}
+
+.popup-sale-price {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.popup-description {
+    background: var(--bg-light);
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.popup-description h4 {
+    font-size: 1rem;
+    color: var(--dark-color);
+    margin-bottom: 10px;
+}
+
+.popup-description p {
+    color: var(--text-light);
+    line-height: 1.7;
+}
+
+.popup-stock {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+
+.popup-stock.in-stock {
+    background: rgba(37, 211, 102, 0.1);
+    color: var(--success-color);
+}
+
+.popup-stock.out-of-stock {
+    background: rgba(220, 53, 69, 0.1);
+    color: var(--error-color);
+}
+
+.popup-add-cart {
+    width: 100%;
+}
+
+/* Product card clickable overlay */
+.product-image {
+    position: relative;
+    cursor: pointer;
+}
+
+.product-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 500;
+    opacity: 0;
+    transition: var(--transition);
+    border-radius: var(--radius);
+}
+
+.product-image:hover .product-overlay {
+    opacity: 1;
+}
+
+.product-name.product-clickable {
+    cursor: pointer;
+}
+
+.product-name.product-clickable:hover {
+    color: var(--primary-color);
+}
+
+/* Responsive popup */
+@media (max-width: 768px) {
+    .popup-content {
+        grid-template-columns: 1fr;
+    }
+
+    .popup-image {
+        border-radius: 20px 20px 0 0;
+        padding: 20px;
+    }
+
+    .popup-details {
+        padding: 20px;
+    }
+
+    .popup-details h2 {
+        font-size: 1.4rem;
+    }
+
+    .popup-sale-price {
+        font-size: 1.5rem;
+    }
+}
