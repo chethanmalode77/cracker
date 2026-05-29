@@ -75,7 +75,7 @@ function getCartCount() {
 
 // Update cart count display
 function updateCartCount() {
-    const countElements = document.querySelectorAll('.cart-count, #cartCount');
+    const countElements = document.querySelectorAll('.cart-count, #cartCount, #cartFloatCount, .cart-float-count');
     const count = getCartCount();
 
     countElements.forEach(el => {
