@@ -287,6 +287,18 @@ img {
     gap: 12px;
 }
 
+.logo-img {
+    height: 55px;
+    width: auto;
+    max-width: 180px;
+    object-fit: contain;
+    transition: var(--transition);
+}
+
+.logo:hover .logo-img {
+    transform: scale(1.05);
+}
+
 .logo-icon {
     width: 50px;
     height: 50px;
@@ -1653,6 +1665,50 @@ img {
 .footer-bottom .disclaimer i {
     color: var(--secondary-color);
     margin-right: 5px;
+}
+
+/* ================================
+   Floating Cart Button
+   ================================ */
+.cart-float {
+    position: fixed;
+    bottom: 100px;
+    right: 25px;
+    width: 55px;
+    height: 55px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.4rem;
+    box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4);
+    z-index: 999;
+    transition: var(--transition);
+    text-decoration: none;
+}
+
+.cart-float:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 25px rgba(255, 107, 53, 0.6);
+}
+
+.cart-float .cart-float-count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: var(--accent-red);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 700;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid white;
 }
 
 /* ================================
